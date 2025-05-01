@@ -3,7 +3,7 @@ title: "About"
 ---
 
 <div style="text-align: right;">
-    <img src="AntNewCropWhiteV2.jpg" alt="Landing Image" style="max-width: 20%; height: auto; border-radius: 50%">
+    <img src="/img/AntNewCropWhiteV2.jpg" alt="Landing Image" style="max-width: 20%; height: auto; border-radius: 50%">
 </div>
 
 Hello! My name is Anthony but people only really call me Anthony when I'm in trouble, so you can me Ant 😁
