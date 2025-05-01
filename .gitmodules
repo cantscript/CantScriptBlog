@@ -1,0 +1,8 @@
+[submodule "themes/congo"]
+	path = themes/congo
+	url = https://github.com/jpanther/congo.git
+	branch = stable
+[submodule "themes/kayal"]
+	path = themes/kayal
+	url = https://github.com/mnjm/kayal.git
+	branch = main

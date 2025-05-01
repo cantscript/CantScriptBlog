@@ -1,0 +1,9 @@
+{{ errorf ">>> I am running layouts/index.html" }}
+{{ define "main" }}
+    {{ if templates.Exists "partials/homepage.html" }}
+        {{ partial "homepage.html" . }}
+    {{ else }}
+        {{ partial "home/profile.html" . }}
+    {{ end }}
+    {{ partial "home/recents.html" . }}
+{{ end }}

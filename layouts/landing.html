@@ -1,0 +1,27 @@
+{{ define "main" }}
+<div class="landing-page">
+
+    <p>{{ .Description }}</p>
+
+    <div>{{ .Content }}</div>
+
+    <!-- Display Featured Blogs -->
+    <div class="recent-posts">
+        <h2>Featured Blogs</h2>
+        <div class="lst-card">
+            {{ $blogPosts := where .Site.RegularPages "Type" "blog" }}
+            {{ $blogPosts = first 4 $blogPosts }}
+            {{ range $blogPosts }}
+                {{ partial "list/card.html" (dict "page" . "lvl" 2) }}
+            {{ end }}
+        </div>
+
+        <!-- "More" link under the posts -->
+        <div class="show-more">
+            <a href="/posts/" class="more-link">More →</a>
+        </div>
+
+    </div>
+
+</div>
+{{ end }}
