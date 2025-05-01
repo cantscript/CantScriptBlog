@@ -11,7 +11,7 @@ Looking for SchoolAssembly? Find it on [GitHub](https://github.com/cantscript/Sc
 {{< /callout >}}
 
 <div style="text-align: center;">
-    <img src="/img/CantScript_LogoV3.png" alt="Landing Image" style="max-width: 60%; height: auto;">
+    <img src="CantScript_LogoV3.png" alt="Landing Image" style="max-width: 60%; height: auto;">
 </div>
 
 👋🏼 Hello...world? Maybe that too cliche. In anycase welcome to my blog, CantScript. 
