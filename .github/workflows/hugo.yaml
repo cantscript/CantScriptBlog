@@ -1,5 +1,5 @@
 # Sample workflow for building and deploying a Hugo site to GitHub Pages
-name: Deploy Hugo site to Pages
+name: Deploy CantScript Blog to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -32,7 +32,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.145.0
+      HUGO_VERSION: 0.147.0
       HUGO_ENVIRONMENT: production
       TZ: America/Los_Angeles
     steps:
