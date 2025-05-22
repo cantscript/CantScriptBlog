@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="content-language" content="en-us" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  
+  
+  <title>Automatically Updating VPP Apps &middot; CantScript</title>
+  <meta name="title" content="Automatically Updating VPP Apps &middot; CantScript" />
+  
+
+  
+  
+  <meta name="description" content="Keeping your VPP (Apps &amp; Books) Apps up to date can be as simple as a check box in Jamf School but lets look at what to expect when using the `Automatically Update Apps when Available` Option" />
+  
+  <meta name="keywords" content="Workflows, Apps, VPP, " />
+  <link rel="canonical" href="http://localhost:1313/posts/automatically-updating-vpp-apps/" />
+
+  
+
+  
+    
+        <link rel="stylesheet" href="/css/theme.css">
+    
+  
+    
+        <link rel="stylesheet" href="/css/main.css">
+    
+  
+    
+  
+
+
+
+  
+  
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="CantScript" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+  
+
+  <meta property="og:url" content="http://localhost:1313/posts/automatically-updating-vpp-apps/">
+  <meta property="og:site_name" content="CantScript">
+  <meta property="og:title" content="Automatically Updating VPP Apps">
+  <meta property="og:description" content="Keeping your VPP (Apps &amp; Books) Apps up to date can be as simple as a check box in Jamf School but lets look at what to expect when using the Automatically Update Apps when Available Option">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-22T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-22T00:00:00+00:00">
+    <meta property="article:tag" content="Workflows">
+    <meta property="article:tag" content="Apps">
+    <meta property="article:tag" content="VPP">
+    <meta property="og:image" content="http://localhost:1313/posts/automatically-updating-vpp-apps/updatescover.png">
+
+  
+    <meta property="og:image" content="http://localhost:1313/updatescover.png" />
+  
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/posts/automatically-updating-vpp-apps/updatescover.png">
+  <meta name="twitter:title" content="Automatically Updating VPP Apps">
+  <meta name="twitter:description" content="Keeping your VPP (Apps &amp; Books) Apps up to date can be as simple as a check box in Jamf School but lets look at what to expect when using the Automatically Update Apps when Available Option">
+
+  
+    <meta name="twitter:image" content="http://localhost:1313/updatescover.png" />
+  
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script
+      defer
+      type="text/javascript"
+      src="/lib/fuse/fuse.min.1f56d60a7738743270762a2aa4e0a453be99c4476f06f3b2f51f4377d12a7ed973420f76a308d7e4855d88ec34d25940c9015464934faf30e7599fe566d7f6e4.js"
+      integrity="sha512-H1bWCnc4dDJwdioqpOCkU76ZxEdvBvOy9R9Dd9EqftlzQg92owjX5IVdiOw00llAyQFUZJNPrzDnWZ/lZtf25A=="
+    ></script>
+  
+
+
+
+  
+  
+
+
+  
+  
+  
+  
+  
+
+  
+  
+  
+    <link rel="preload" href="http://localhost:1313/fonts/Ubuntu-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+
+  
+
+  
+
+  
+  <script>
+    const siteTheme = "dark";
+    let savedTheme = localStorage.getItem('theme') || siteTheme;
+    if (savedTheme == 'auto') {
+      if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
+        savedTheme = 'dark';
+      }
+    }
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  </script>
+</head>
+
+  <body>
+    <div class="content">
+      <header>
+    
+    <a class="title" href="/">
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+
+  
+    <img loading="" 
+
+    
+      
+        
+        
+        
+          
+          
+          
+            src="/img/CantScript_LogoOnlyv3_hu_8dd51e941f19ba6f.png"
+          
+        
+      
+    
+      alt="Site Logo" />
+  
+
+
+
+
+    </a>
+    
+    <div class="header-cntr">
+    <a class="title" href="/">
+    <span>CantScript</span>
+    </a>
+  <div class="menu">
+  <nav id="main-menu" class="mm-normal">
+    <ul>
+    <li> <button id="mob-x-icon" class="menu-btn" arial-label="x-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+ </button> </li>
+    
+      <li><a href="/posts/" aria-label="posts">
+      Posts</li></a>
+    
+      <li><a href="/about/" aria-label="about">
+      About</li></a>
+    
+      <li><a href="/more/" aria-label="more">
+      More</li></a>
+    
+      <li><a href="https://github.com/cantscript" aria-label="github">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://www.linkedin.com/in/anthony-darlow-a795b294/" aria-label="linkedin">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://macadmins.slack.com/team/UA73QAKJL" aria-label="slack">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+    </ul>
+  </nav>
+    <div class="side-menu">
+    
+<button id="search-open" class="menu-btn" aria-label="Search button">
+  
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+</button>
+
+<div id="search-container" data-url="http://localhost:1313/">
+  <div class="search">
+    <div class="panel">
+      <form>
+        
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+        <input type="search" id="search-query" placeholder="Search" tabindex=0 autocomplete="off"/>
+        <button id="search-close" title="Cancel (ESC)">
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+
+        </button>
+      </form>
+    </div>
+    <ul id="search-results">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+    <div id="search-overlay"></div>
+  </div>
+</div>
+
+    
+    <button id="theme-switcher" class="menu-btn" aria-label="Theme switcher">
+      <div id="moon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+
+
+      </div>
+      <div id="sun">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+
+
+      </div>
+    </button>
+    
+    </div>
+    <button id="mob-hb-icon" class="menu-btn" aria-label="Hamburger icon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+
+
+    </button>
+  </div>
+  <script>
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('mob-hb-icon');
+    const closeBtn = document.getElementById('mob-x-icon');
+    const mainMenu = document.getElementById('main-menu');
+    const body = document.body;
+
+    openBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-normal', 'mm-mobile-open');
+        closeBtn.style.display = 'block';
+        body.style.overflow = 'hidden';
+    });
+    closeBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-mobile-open', 'mm-normal');
+        closeBtn.style.display = 'none';
+        body.style.overflow = '';
+    });
+    })
+  })();
+  </script>
+  
+  <script>
+  (function() {
+    var mainmenu = document.getElementById('main-menu');
+    if (!mainmenu) return;
+
+    var path = window.location.pathname;
+    var links = mainmenu.querySelectorAll('a');
+
+    links.forEach(function(link) {
+      if (link.getAttribute('href') === path) {
+        link.classList.add('active');
+      }
+    });
+  })();
+  </script>
+  
+</div>
+</header>
+
+      <main>
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+    <img loading="eager" class="cover-img"
+
+    
+      
+        src="/posts/automatically-updating-vpp-apps/updatescover.png"
+      
+    
+      alt="Cover Image" />
+  
+
+
+
+
+
+
+
+
+
+<ul class="breadcrumbs">
+  <li><a href="http://localhost:1313/">
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+
+
+</a></li>
+  
+    
+    
+      <li><a href="http://localhost:1313/posts/">Posts</a></li>
+    
+    
+  
+    
+  
+</ul>
+
+
+
+<h1 class="pg-title">Automatically Updating VPP Apps</h1>
+
+
+<div class="meta">
+  
+
+
+
+<p>
+
+
+  
+  
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2a1,1,0,0,1,1,1Z"/></svg>
+
+
+</span>
+  Posted on <time datetime="2025-05-22T00:00:00&#43;00:00">May 22, 2025</time>
+  
+  
+  
+
+
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM3.00683 12C3.00683 16.9668 7.03321 20.9932 12 20.9932C16.9668 20.9932 20.9932 16.9668 20.9932 12C20.9932 7.03321 16.9668 3.00683 12 3.00683C7.03321 3.00683 3.00683 7.03321 3.00683 12Z" fill="currentColor"/>
+<path d="M12 5C11.4477 5 11 5.44771 11 6V12.4667C11 12.4667 11 12.7274 11.1267 12.9235C11.2115 13.0898 11.3437 13.2343 11.5174 13.3346L16.1372 16.0019C16.6155 16.278 17.2271 16.1141 17.5032 15.6358C17.7793 15.1575 17.6155 14.5459 17.1372 14.2698L13 11.8812V6C13 5.44772 12.5523 5 12 5Z" fill="currentColor"/>
+</svg>
+
+
+</span>
+  
+    24 mins
+  
+
+
+</p>
+
+  
+
+
+<p>
+  <span class="meta-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M48 32H197.5C214.5 32 230.7 38.74 242.7 50.75L418.7 226.7C443.7 251.7 443.7 292.3 418.7 317.3L285.3 450.7C260.3 475.7 219.7 475.7 194.7 450.7L18.75 274.7C6.743 262.7 0 246.5 0 229.5V80C0 53.49 21.49 32 48 32L48 32zM112 176C129.7 176 144 161.7 144 144C144 126.3 129.7 112 112 112C94.33 112 80 126.3 80 144C80 161.7 94.33 176 112 176z"/></svg>
+
+
+ </span>
+  
+  <a class="tag" href="/tags/workflows/">Workflows</a>
+  
+  <a class="tag" href="/tags/apps/">Apps</a>
+  
+  <a class="tag" href="/tags/vpp/">VPP</a>
+  
+</p>
+
+
+
+</div>
+
+
+
+
+  <div class="toc">
+    <details >
+      <summary accesskey="c" title="(Alt+C)">
+        Table of Contents
+      </summary>
+      <div class="toc-innr">
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#vpp-apps">VPP Apps</a></li>
+        <li><a href="#updating-apps">Updating Apps</a></li>
+        <li><a href="#user-updates">User Updates</a></li>
+        <li><a href="#planned-updates-by-admins">Planned Updates by Admins</a></li>
+        <li><a href="#automatic-app-updates">Automatic App Updates</a></li>
+        <li><a href="#force-for-locations-global-settings-and-app-details">Force for Locations, Global Settings and App Details</a></li>
+        <li><a href="#sounds-great-set-and-forget-sign-me-up">Sounds Great, Set and Forget, Sign Me Up&hellip;</a></li>
+        <li><a href="#automatic-update-mechanics--expected-behaviours">Automatic Update Mechanics &amp; Expected Behaviours</a></li>
+        <li><a href="#dealing-with-the-expected-behaviour">Dealing with the Expected Behaviour</a></li>
+        <li><a href="#vpp-app-update-options">VPP App Update Options</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+    </details>
+  </div>
+  
+
+
+
+<p>Let&rsquo;s get one thing out of the way, I know the term I should be using is &ldquo;Apps &amp; Books in Apple School Manager&rdquo; and not VPP; but lets face it, almost everyone knows what is meant by VPP and for this post, and the amount of times I&rsquo;ll reference it, its a heap quicker to type! So to avoid any confusion if I use VPP, Im talking about apps acquired through Apple School Manager (ASM) 😜</p>
+<p>Also I will dig into the <code>Automatically Update Apps when Available</code> option and some useful nuggets about expected behaviours but since we&rsquo;re talking Apps and updates I&rsquo;m going to take a little de-tour before I get to the automatic option, so stick with me or just jump straight to the section <strong>Automatic App Updates</strong></p>
+
+<h3 id="vpp-apps">
+  VPP Apps
+  
+</h3>
+<p>VPP Apps are a nice, simple and an easy way that Apple has provided IT Admins to deploy apps to devices from the App Store. In fact, on iOS / iPadOS devices its the only way! <em>(..well mostly but lets not get into 3rd party app stores and side loading.)</em>. To make use of this, as an Admin you simply need register your institution for an ASM environment. I use the word simply, since although the process is straight forward, getting the right person(s) in your institution to click the links or speak to somebody at Apple isn&rsquo;t always as simply as it sounds. Hopefully, you are the person that can agree to the T&amp;Cs and sign your institution up, if you haven&rsquo;t already, its a lot less hassle that way.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+For instructions on signing up to Apple School Manager see the <a href="https://support.apple.com/en-gb/guide/apple-school-manager/axm402206497/web" target="_blank">Sign Up For Apple School Manager Documentation</a>
+. Its worth noting that ASM and Apps &amp; Books content isn&rsquo;t available in every region.
+</span>
+</div>
+
+<p>When it comes to acquiring content and syncing with Jamf School, this is again a pretty simple and well known process. An Admin logs into Apple School Manager and navigates to Apps &amp; Books, searches for the App (or Book) needed and selects the amount of licences needed their deployment. I use the word &ldquo;acquire&rdquo; here as I think its strange to say &ldquo;buy&rdquo; apps when they are free. After a few moments these licences are assigned to your token and avaialble in your MDM. In Jamf School, as long as configured already (See <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Volume_Purchasing_Integration.html" target="_blank">Volume Purchase Integration</a>
+ page in the Jamf School docs) you can sync your token and the App is ready to go, scope as required and the Apps start to appear on the devices.</p>
+<div style="text-align: center;">
+    <img src="MainAppsView.png" alt="App Inventory in Jamf School Console" style="max-width: 80%; height: auto;">
+</div>
+<p>Since I mentioned it, there are a few ways that you can sync your VPP token with ASM in Jamf School.</p>
+<p>The first to just do nothing! There is an automatic sync with ASM at regular intervals which means the new apps, books or additional licences will turn up all on there own&hellip;..<em>eventually</em>.</p>
+<p>The likelihood is, if you have acquired a new app or licences you are going to want to deploy them right away and not wait for that automatic sync. Its just going to break your rhythm and thats not going to be useful for that teacher that has just knocked on your door, asking for the app&hellip;for their next lesson&hellip;in 20 mins (hopefully they&rsquo;ve also brought biscuits or coffee to help smooth over the urgency ☕️🍪)</p>
+<p>You can therefore, manually sync Jamf School with ASM to pull through the latest information. This can be done by either</p>
+<ol>
+<li>Navigating to <code>Dashboard</code> and hitting the <code>Syncronize Now</code> button</li>
+<li>Navigating to <code>Apps</code> -&gt; <code>Inventory</code> and clicking the <code>Sync with Apple School Manager</code> button</li>
+</ol>
+<p>Okay so thats nothing to do with updating apps but we at least have a nice overview of how simple this process is (even if you&rsquo;ve never seen it in Jamf School before)</p>
+
+<h3 id="updating-apps">
+  Updating Apps
+  
+</h3>
+<p>We&rsquo;ve got a nice simple way of deploying apps with VPP but what about keeping them up to date? After all, deploying Apps is only part of their lifecycle.</p>
+<p>There are a few ways an Admin can keep their VPP Apps up to date when using Jamf School depending on your requirements. This could be offloading this responsibility directly to the user, keeping it squarely as an admin task where you choose when, who and what gets updated or just set and forget with an automatic option.</p>
+<p>Like often when there&rsquo;s more than one way to do things, theres no such thing as a right or wrong way, its all dependant on one Admins situation and environment. Also sometimes, when available, using more than one way might be the best option.</p>
+<p>For example if you are in an environment where everyone needs the latest version of an app all the time, automatic updates are the best but why not also enable the user to update as well. Theres double the chances things are kept up to date.</p>
+<p>The opposite side of the fence is if you are in an environment where you need to test the functionality against various OS versions and implement BETA testing groups. You&rsquo;d want to keep this squarely as an Admin task and push App updates only when you are ready.</p>
+
+<h3 id="user-updates">
+  User Updates
+  
+</h3>
+<p>The way to enable users to update apps is via the Jamf Student or Teacher apps (they both offer this functionality). This doesn&rsquo;t require you to be using the apps for classroom management (although, of course are highly recommended tools for teachers in the classroom).</p>
+<p>To configure this feature In the Jamf School console navigate to</p>
+<ol>
+<li><code>Organisation</code> -&gt; <code>Settings</code> -&gt; <code>Student</code> <br></li>
+<li>Check the box <code>Allow Updates of Automatically Installed Apps</code> <br></li>
+<li>Click <code>Save</code></li>
+</ol>
+<p>Now in the Jamf Student / Teacher app a user has a a menu item called <code>App updates</code>. If they navigate to that menu they will see any VPP apps deployed automatically by Jamf School that require updating and can start the updating of any or all available updates. In addition, any apps that are installed via the Jamf Student / Teacher App are always shown in this menu.</p>
+<div style="text-align: center;">
+    <img src="StudentAppUpdates.png" alt="Jamf Student App Updates Menu" style="max-width: 70%; height: auto;">
+</div>
+<p>This option is available for macOS, iOS and iPadOS.</p>
+<p><strong>Pros</strong> <br></p>
+<ul>
+<li>Free&rsquo;s up Admin time as keeping Apps up to date becomes the users responsibility <br></li>
+<li>Users can update Apps when it is convenient for them and without disruption mid task <br></li>
+<li>Ideal for 1:1 devices, particular ones that go home</li>
+</ul>
+<p><strong>Cons</strong> <br></p>
+<ul>
+<li>Takes some user education to ensure they are aware they can self serve App updates <br></li>
+<li>Users may not actually ever update apps, which in the long run might cause issues <br></li>
+<li>Enabling users to update apps at any time might mean they do it on your network, which might cause you bandwidth issue <em>(think if many users did this all at the same time, and yes even with a Caching Server it could cause some network slowness)</em> <br></li>
+<li>Enabling users to update apps at any time likely means that a user, most likely a student, could and will update a key app in the middle of a lesson to prevent them from having to do any work <br></li>
+<li>Not recommended for devices that are shared between multiple users since its no one persons responsibility to keep apps up to date</li>
+</ul>
+
+<h3 id="planned-updates-by-admins">
+  Planned Updates by Admins
+  
+</h3>
+<p>Keeping Apps up to date this way requires the person responsible for keeping apps up to date to have access to the Jamf School console and the time to deliver this service. By no means does this mean that its a bad option but it can be a much more time intensive than other option.</p>
+<p>To use this option, in the console navigate to <code>Apps</code> -&gt; <code>Updates</code>. From this window you will see a list of apps that require updating. Within each app that requires a update you can either click the <code>Update all device</code> button (which updates the app on all devices that have it installed) or a <code>Show devices</code> button. If you select <code>Show devices</code> you get a list of all the devices with that app installed and have an update available and can update the app on single iPads (rather than the entire list). There are also some mass actions that can be performed at the main <code>Updates</code> page by checking the box to select all or many apps. This way you can choose to update all apps, across your entire fleet with a single click.</p>
+<div style="text-align: center;">
+    <img src="ConsoleAppUpdates.png" alt="Jamf Student App Updates Menu" style="max-width: 80%; height: auto;">
+</div>
+<p>I&rsquo;ve seen this options used in two different ways depending on the reasoning behind going with this route in the first place.</p>
+<p>The first is for Admins that want to update everything, all at once but at a time they choose, for example over a school holiday or over the weekend. Using the bulk option allows for a single click to start the flow but it does require a click of a button, so the Admin chooses when to start that particular flow.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Again, just to point out, even with a Caching Server, pushing all updates to all devices at once (when they are on your school network at least) could produce a heavy load. Consideration to the impact of this should be given.
+</span>
+</div>
+
+<p>The second is for Admins that have update test plans. Being able to not only choose when to update apps but who receives the update can be very useful if you have a BETA users group that provides feedback on usability before releasing the update to the general population (I&rsquo;m sure every Admin has seen an app update that didn&rsquo;t quite work the way the dev intended and had an app out of action while a fix is delivered)</p>
+<p><strong>Pros</strong> <br></p>
+<ul>
+<li>Granular control of when updates are applied <br></li>
+<li>Updates only issued during times deemed as appropriate by admins <br></li>
+<li>Run test plans with BETA test user style groups <br></li>
+</ul>
+<p><strong>Cons</strong> <br></p>
+<ul>
+<li>Requires Admin intervention on a regular basis <br></li>
+<li>Can be very time intesive <br></li>
+<li>Could produce a heavy load on the network <br></li>
+<li>Apps could be without new features if not updated regularly, which might have an impact on the teaching in the classroom</li>
+</ul>
+
+<h3 id="automatic-app-updates">
+  Automatic App Updates
+  
+</h3>
+<p>So then we land at automatic app updates. This is a feature enables an Admin to set and forget when it comes app updates (well, kind of but we&rsquo;ll get to that shortly). This setting can be enabled by navigating to <code>Organisation</code> -&gt; <code>Settings</code> -&gt; <code>General</code>. From this window check the box <code>Automatically update apps when an update is available</code> (note that this says only for iOS devices on iOS 11.3 or later but this does work for macOS as well.)</p>
+<p>Its that simple, automatic updates are enabled and when a new app is available it will get updated on the device&hellip;which sounds great. Until you think about it a little more, particularly the part that says <code>when an update is available</code>. When is an update available? Well thats the point, how long is a piece of string. This could be any time but including (and thanks to <a href="https://en.wikipedia.org/wiki/Murphy%27s_law" target="_blank">Murphys Law</a>
+, most likely) in the middle of class. What happens to an app when its updating? Well the next time it is closed, or if already closed, then it becomes unavailable until the update is complete. Depending on the size of the app, the load on the network at any given time and if the app is cached on a Caching Server, then you could have entire classes suddenly not able to complete their tasks. Or put another way a queue of angry teachers at your door.</p>
+<p>Thats why on the same <code>General</code> window under the <code>Automatically update apps when an update is available</code> option there is a second option that works to make automatic updates smarter. This option is <code>Only automatically update apps during the specified times</code>. Once the box is check there are two boxes where the Admin can define a start time and finish time. This allows an Admin to basically say</p>
+<p><em>&ldquo;Please automatically update the VPP apps when available, but only between the hours of 22:00 and 04:00&rdquo;.</em></p>
+<p>This way apps wont be unavailable due to updates during school time or during times of day that you might expect a child to be doing homework (if the devices go home). The time window that you give here will be completely dependant on your situation, for example if the devices do not go home and you know that they aren&rsquo;t used from 17:00 then you could start the update window from say 18:00 right the way through until the next morning before people start to arrive at school. One thing that I would personally recommend though, is to make that update window as wide as possible and at least 5 hours, due to the mechanisms used to provide the update (again, we&rsquo;ll get to this shortly). This might also be useful if you have some sort of network shaping that happens at certain times of time of the day <em>(I&rsquo;ve seen school completely turn off wifi or heavily restrict bandwidth during the evening)</em>, to ensure that the updates take place as smoothly as possible.</p>
+
+<h3 id="force-for-locations-global-settings-and-app-details">
+  Force for Locations, Global Settings and App Details
+  
+</h3>
+<p>Once an Admin has configured these settings and if they also use <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Locations.html" target="_blank">Locations</a>
+, they can enforce this on all locations if set from the main location. At the top right corner of the window you see a drop down (only if using locations) where you can toggle between <code>Force these settings for all locations</code> and <code>Do not force these settings for all locations</code>. If you force for all locations the automatic update setting(s) and any and all settings that are in the <code>General</code> window are set for every other location and cannot be configured differently at each location. This might just be what you want so that all all locations act in the same way but in other cases each location may need a different window for example.</p>
+<div style="text-align: center;">
+    <img src="ConsoleGeneralForceLocations.png" alt="Force Location example in the general settings of the console" style="max-width: 80%; height: auto;">
+</div>
+<p>Another little message you will see alongside the <code>Automatically update apps when an update is available</code> is <code>This setting can be overwritten in App Details</code>. This option allows for a more granular approach if a &ldquo;set for everything and forget&rdquo; doesn&rsquo;t quite work. An admin could set the <code>Global</code> setting (aka set under <code>Organisation</code> -&gt; <code>Settings</code> -&gt; <code>General</code>) so that apps automatically update but exclude certain apps from this, so that new versions can be tested before pushing out to the entire fleet.</p>
+<p>To do this navigate to <code>Apps</code> -&gt; <code>Inventory</code>, search for / choose the app to exclude and click on its name or the pencil tool. In this App Detail window, on the right there are some options that can be configured for this individual app, including a setting <code>Automatically update apps when an update is available</code>. As standard this is set to <code>Use global settings</code> in every app record but there are also two other options <code>Enable</code> and <code>Disable</code>.</p>
+<div style="text-align: center;">
+    <img src="ConsoleAppRecordUpdates.png" alt="Force Location example in the general settings of the console" style="max-width: 80%; height: auto;">
+</div>
+<p>If an admin wanted to exclude this app from being automatically updated they would choose <code>Disable</code> from this menu and ensure they hit <code>Save</code> before leaving the page. Lets assume we&rsquo;ve selected <code>Automatically update apps when an update is available</code> in <code>Organisation</code> -&gt; <code>Settings</code> -&gt; <code>General</code>; The result is that as standard Apps will get updated automatically apart from this app, which the Admin would need to manually update or allow the user to self serve the update.</p>
+<p>This situation can also be flipped. Lets say an Admin doesn&rsquo;t want to automatically update apps as a general rule however, there are a handful of apps that must always be up to date. The Admin would leave the <code>Automatically update apps when an update is available</code> in <code>Organisation</code> -&gt; <code>Settings</code> -&gt; <code>General</code> unchecked. They could then go to that &ldquo;school critical&rdquo; app record and choose <code>Enable</code> in the App Details <code>Automatically update apps when an update is available</code> option. Then only this app would automatically update, leaving for other flows for the rest of the apps.</p>
+
+<h3 id="sounds-great-set-and-forget-sign-me-up">
+  Sounds Great, Set and Forget, Sign Me Up&hellip;
+  
+</h3>
+<p>For most people, automatically having VPP apps update and not needing to think about it again (or until we need to troubleshoot something at least) is going to be the option that is chosen the most. It just makes sense for most Admins.</p>
+<p>So you&rsquo;ve chosen this option and things are ticking along, you&rsquo;ve not thought about app updates for a little while. Then suddenly you get a ticket in your system or a knock on the door from a teacher. <em>App X</em> had an update a 4 or 5 days days ago, its a major one with an exciting new feature that is going to really help that teacher when it comes to engaging students. Only, they&rsquo;ve looked at <em>App X</em> on their device for the last few days, it doesn&rsquo;t look any different and the app still says its the old version number when it loads.</p>
+<p>You look at them, thinking &ldquo;users&rdquo; knowing full well that you&rsquo;ve got automatic updates turned on. Only they show you, and the app does indeed say the old version. Next you think maybe I&rsquo;ll just have a look at the console, theres a section for App updates. So you log into the console and navigate to <code>Apps</code> -&gt; <code>Updates</code>. As the page loads, theres a heap of apps listed there that need updating on a heap of devices, including <em>App X</em>. You want to help the teacher that needs to updated app so you hit <code>Update all devices</code> on <em>App X</em>, smile at the teacher, say it&rsquo;ll be updated in a little while and apologise while secretly sweating it wondering why your apps aren&rsquo;t automatically updating.</p>
+<p>If you are already use this feature, this might have actually happened to you already. So wants gone on? why aren&rsquo;t your apps update? To answer that we need to understand the mechanics and expected behaviours that come with automatic updates.</p>
+
+<h3 id="automatic-update-mechanics--expected-behaviours">
+  Automatic Update Mechanics &amp; Expected Behaviours
+  
+</h3>
+<p>So there are a few things that we need to understand with the <code>Automatically update apps when an update is available</code> feature in Jamf School.</p>
+<p>The first is around an &ldquo;App Update&rdquo;</p>
+<p>There isn&rsquo;t an Update App <code>command</code> as such (its the same with reinstall) in the MDM framework. Instead a regular <code>InstallApplicationCommand</code>, which is the same command sent when an app is first installed, is used. This prompts the device to go and pull the app from the app store, which is the latest version and as such a user see&rsquo;s an updated app on the device. Commands like this can be pushed to the device there and then (like the first install of an app would be) or queued up for when a device nexts checks-in.</p>
+<p>This in of itself isn&rsquo;t the part that is the &ldquo;light bulb moment&rdquo; but knowing that an update is kicked on server side (at least until Apple expand DDM a little more) is going to help all the pieces fall into place in a second.</p>
+<p>The question we should be asking is how does Jamf School know when to send the device a <code>InstallApplicationCommand</code> or more so when and how does Jamf School know that there is a new version of <em>App X</em> in order to send an <code>InstallApplicationCommand</code> to the device?</p>
+<p>This is two fold.</p>
+<p>Firstly when a device does a <em>full</em> check in with Jamf School (this happens once a day, through clicking <code>refresh device</code> on the device inventory and a few other times) there are a number of <code>commands</code> Jamf School sends to the device to query it for information. One if these is <code>InstalledApplicationList</code> this returns a heap of data about the apps installed on the device, including a key <code>HasUpdateAvailable</code>, which is <code>true</code> or <code>false</code> and the <code>ExternalVersionIdentifier</code>. Basically the ID of the device in the App Store</p>
+<p>The second part of the puzzle is Jamf School&rsquo;s App record(s) getting updated from Apple School Manager (actually its the App Store but I&rsquo;m splitting hairs), specifically it&rsquo;s version number changing. If the version number in the App record in the Jamf School database hasn&rsquo;t changed, and the device hasn&rsquo;t reported its <code>InstalledApplicationList</code> data, Jamf School wont queue up that all important <code>InstallApplicationCommand</code> <em>(this is a simplified version of events, Im sure there is some other logic here but the point is we need both sides of the coin, as it were, before Jamf School is able to queue the update)</em></p>
+<p>&hellip;we know from above when the device reports the <code>HasUpdateAvailable</code>, so the follow on question should be</p>
+<p><em>&ldquo;So when does Jamf School sync with ASM to pull the latest metadata about the apps its pulling through into the App Inventory?&rdquo;</em></p>
+<p>This is the key question! Understanding this is the key to understanding the behaviour of the <code>Automatically update apps when an update is available</code> feature and either not panicking the next time somebody says apps haven&rsquo;t updated or amending your workflow a little.</p>
+<p>As it stands and understandably so, Jamf School doesn&rsquo;t knock on ASM&rsquo;s door every few minutes to ask if theres any changes. Instead Jamf School syncs with ASM only in a few scenarios, in fact we&rsquo;ve mentioned a few of these already above. When it comes to apps, as an Admin you can you can initiate a School ASM sync by</p>
+<ul>
+<li>Navigating to <code>Dashboard</code> and clicking the <code>Synchroize Now</code> button (this will sync data about all apps) <br></li>
+<li>Navigate to <code>Apps</code> -&gt; <code>Inventory</code> and clicking the <code>Sync with Apple School Manager</code> button (this will sync data about all apps) ,br&gt;</li>
+<li>Navigate to <code>Apps</code> -&gt; <code>Inventory</code>, click on either the pencil tool or the app name to enter the App Details and then click <code>Check for updates in the App Store</code> (this will sync data about this app) <br></li>
+<li>Navigate to <code>Apps</code> -&gt; <code>Updates</code> (this will sync data about all apps and you will see a message in the lower right once the sync is complete)</li>
+</ul>
+<p>Its not until a sync happens that Jamf School can compare the App version number in the Jamf School database with that of the version number in ASM, do the other logic with the data the device reports back and if needed (ie the app version is different and the device reports an avilable update) send that all important <code>InstallApplicationCommand</code>.</p>
+<p><em>&ldquo;What happens if I am truly a set and forget Admin? I rarely do one of the things you&rsquo;ve just said above! Does that mean my apps don&rsquo;t ever actually get updated?&rdquo;</em></p>
+<p>I&rsquo;ll guess there&rsquo;ll will be more than a few people asking this question right now. I certainly asked this question at least.</p>
+<p>Luckily the answer is, even if are a <em><strong>true</strong></em> set and forget Admin, your apps are still getting updated. Just maybe not as quickly after release as your users would like. Jamf School will automatically initiate an ASM sync to fresh app metadata once every 7 days. After this automatic sync, if there are any differing version numbers, which suggest an app needs updating, Jamf School will queue and deliver the <code>InstallApplicationCommand</code> to the corresponding devices (as long as they&rsquo;ve successfully reported back the <code>InstalledApplicationList</code>) for these apps.</p>
+<p>So the apps will get updated even if you set and forget but at any given time, if you were to check the <code>Apps</code> -&gt; <code>Updates</code> window you will see apps that need to be updated and haven&rsquo;t. This is because the automatic sync hasn&rsquo;t happened yet (its not been 7 days since the last sync). The very fact that clicked on that page initiated a sync and that data has literally just been pulled through, now that there is a known update in the Jamf School database, the devices will get the updates at their next check in (again, as long as they&rsquo;ve successfully reported back the <code>InstalledApplicationList</code>). Assuming you didn&rsquo;t click the button to have them update now.</p>
+
+<h3 id="dealing-with-the-expected-behaviour">
+  Dealing with the Expected Behaviour
+  
+</h3>
+<p>The key and light bulb moment here is know what is meant by the <code>when an update is available</code> part of automatic updates. when an update is available does not mean as soon as a developer pushes an update to the app store. Instead, what is meant by &ldquo;available&rdquo; is once Jamf School is aware it is available, which depending on your habits as an Admin could be as far out as 7 days from the release to the App Store</p>
+<p>As an Admin there are a few ways to deal with this. Firstly and it feels a little defeatist, don&rsquo;t use the <code>Automatically update apps when an update is available</code> feature and instead opt for one of the other update options mentioned above.</p>
+<p>Second is to evaluate if having an update up to 7 days after release is acceptable for your environment. This could be from a feature or security point on view. Assuming that it is acceptable, my suggestion would be to educate your users that updates can take up to a week after release to update and create some way of your user to escalate important cases so they can have apps updated sooner. From an Admin point of view, this would require a person to go into the console, go to the <code>Apps</code> -&gt; <code>Update</code> page and choose to update that app on the devices.</p>
+<p>Thirdly is to do one of the four things mentioned above each day, or every few days at least. I know that there will be people that think that not very &ldquo;automatic&rdquo; but my argument would be I&rsquo;d bet you are in the Jamf School Console (or somebody on your team) at least once a day, so why not have them click the sync button? Remembering that once the app version number has updated then Jamf School takes care of the rest of it anyway&hellip;.queuing up and deploying the <code>InstallApplicationCommand</code>.</p>
+<p>Oh I almost forgot! while we&rsquo;re talking about queuing up and deploying the <code>InstallApplicationCommand</code>. Remember the option <code>Only automatically update apps during the specified times</code> so that updates only take place at certain times of day? The <code>InstallApplicationCommand</code> is queued and not delivered until a device checks in during that window of time. Thats why I said keep the window as wide as possible (and at least 5 hours) as a check in happens once every four hours with Jamf School and if your update window is only 2 hours, you might have heaps of devices that never get the execute the command as then don&rsquo;t check in during that window, even weeks after an update has been released.</p>
+<div style="text-align: center;">
+    <img src="consoleQueuedAutoUpdate.png" alt="Device Activity with queued command" style="max-width: 80%; height: auto;">
+</div>
+<p><strong>Pros</strong> <br></p>
+<ul>
+<li>Set and forget app updates <br></li>
+<li>Set an update window of time so updates don&rsquo;t happen during key times <br></li>
+<li>Can be set at a global level or per app <br></li>
+<li>Can exclude apps from global setting depending on need <br></li>
+</ul>
+<p><strong>Cons</strong> <br></p>
+<ul>
+<li>Depending on console usage, App sync with ASM can be up to 7 days away when an app is released <br></li>
+<li>Requires device to have successfully reported back details of a <code>InstalledApplicationList</code> command <br></li>
+<li>Scheduled updates require a device to check in during the schedule window, making the window too short or having device with not network connections could see devices rarely get app updates <br></li>
+<li>Perception that auto updates is not working when navigating to <code>Apps</code> -&gt; <code>Updates</code> page <br></li>
+<li>Need for communication for end users and other admins on expected behaviour</li>
+</ul>
+
+<h3 id="vpp-app-update-options">
+  VPP App Update Options
+  
+</h3>
+<p>As you can see there are a number of ways to tackle this and things to consider if you are wanting to use the <code>Automatically update apps when an update is available</code> option. For me, the purpose of this blog was to give a bit more understanding of the mechanics of the <code>Automatically update apps when an update is available</code> option since its done server side and not via a simple MDM framework command.</p>
+<p>Theres been thought and time put into this to make sure that updates only go to devices that have updates available <em>(no point trying to send an update to a device that isn&rsquo;t running an OS that is compatible with the latest version of an app)</em> and at a time that is best suited.</p>
+<p>Im sure however, there are people out there wondering what option I would take. The answer there really depends on the deployment but I&rsquo;d be using a combination of auto updates (more as a fail safe) and another option. For 1:1 devices, especially ones that go home I&rsquo;d look to use auto updates during home hours but also educate the users in how to use the update feature of Jamf Student / Teacher. For shared devices or devices that stay in the school the whole time a combination of auto update (again more as a fail safe) and then pushing updates via the <code>Apps</code> -&gt; <code>Updates</code> pages a few times a week or maybe over the weekend.</p>
+<p>There is one other thing I&rsquo;d like to point out. I&rsquo;ve spoken to people recently where is seems that using the <code>Automatically update apps when an update is available</code> feature in environments where Caching Server is also used causes a sort of loop in some cases. The commands are queued and executed as expected but the app that is installed always seems to be current version the device has, not the newest one.</p>
+<p>I don&rsquo;t have anything else to add to that, in terms of fixes or anything and it doesn&rsquo;t appear to be in every instance. Its more of a PSA. The thing I will say on the topic of Caching Server though&hellip;</p>
+<p>Its super simple to configure, that simple in fact that its now part of macOS. Just a toggle switch to turn on and with more and more households having many Apple devices it makes sense its that simple to turn on and make use of this feature.</p>
+<p>Only most school networks aren&rsquo;t as simple as a home network and once upon a time you only got the Caching ability as part of macOS Server, which you had to configure correctly! Although in todays built-in version of Caching Server its just a toggle switch and designed to &ldquo;just work&rdquo; on simple home networks, there are advanced options in the GUI. Theres even more that can be configured via terminal and DNS servers for when the deployment is on an &ldquo;enterprise&rdquo; style network that most schools find themselves on.</p>
+<p>Only in many cases caching servers are deployed on &ldquo;enterprise&rdquo; style networks by just toggling the switch on and expecting things to &ldquo;just work&rdquo;.</p>
+<p>Caching Server can be great, don&rsquo;t get me wrong and I 100% recommend them. Sometimes its just worth being aware of other things you might want to consider when turning something on (wether thats Caching or Automatic App Updates).</p>
+
+
+
+
+
+
+
+
+
+
+
+<nav class="pagenav">
+  
+  <div></div>
+  
+  
+    <a class="next" href="/posts/using-jamf-school-variables-in-scripts/">
+      <span class="direction">Next »</span>
+      <br>
+      <span> Using Jamf School Variables in Scripts </span>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+      </main>
+      <footer>
+  <div class="copyright">
+     © 2025  Anthony Darlow 
+  </div>
+  
+  <div class="attribution">
+    Built with <a href="https://gohugo.io" target="_blank">Hugo</a> & <a href="https://github.com/mnjm/kayal" target="_blank">Kayal</a>
+  </div>
+  
+  
+  <div>Last update May 22, 2025</div>
+  
+</footer>
+
+    </div>
+    
+
+
+  
+
+
+
+  
+
+
+
+  
+    
+        <script src="/js/theme.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/codecopy.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/search.js"></script>
+      
+    
+  
+
+
+  </body>
+</html>

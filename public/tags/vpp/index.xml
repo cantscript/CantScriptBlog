@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Workflows on CantScript</title>
-    <link>http://localhost:1313/tags/workflows/</link>
-    <description>Recent content in Workflows on CantScript</description>
+    <title>VPP on CantScript</title>
+    <link>http://localhost:1313/tags/vpp/</link>
+    <description>Recent content in VPP on CantScript</description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 22 May 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/workflows/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/vpp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Automatically Updating VPP Apps</title>
       <link>http://localhost:1313/posts/automatically-updating-vpp-apps/</link>
       <pubDate>Thu, 22 May 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/automatically-updating-vpp-apps/</guid>
       <description>Keeping your VPP (Apps &amp; Books) Apps up to date can be as simple as a check box in Jamf School but lets look at what to expect when using the Automatically Update Apps when Available Option</description>
-    </item>
-    <item>
-      <title>Using Jamf School Variables in Scripts</title>
-      <link>http://localhost:1313/posts/using-jamf-school-variables-in-scripts/</link>
-      <pubDate>Wed, 07 May 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/using-jamf-school-variables-in-scripts/</guid>
-      <description>Jamf School allows for variable substitution all over the place, just not in Scripts! Learn how to deliver Jamf School variables to devices for use in Scripts</description>
     </item>
   </channel>
 </rss>
