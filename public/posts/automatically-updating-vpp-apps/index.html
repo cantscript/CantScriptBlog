@@ -465,7 +465,7 @@
 
 </span>
   
-    24 mins
+    25 mins
   
 
 
@@ -714,7 +714,35 @@ Again, just to point out, even with a Caching Server, pushing all updates to all
 <p>This in of itself isn&rsquo;t the part that is the &ldquo;light bulb moment&rdquo; but knowing that an update is kicked on server side (at least until Apple expand DDM a little more) is going to help all the pieces fall into place in a second.</p>
 <p>The question we should be asking is how does Jamf School know when to send the device a <code>InstallApplicationCommand</code> or more so when and how does Jamf School know that there is a new version of <em>App X</em> in order to send an <code>InstallApplicationCommand</code> to the device?</p>
 <p>This is two fold.</p>
-<p>Firstly when a device does a <em>full</em> check in with Jamf School (this happens once a day, through clicking <code>refresh device</code> on the device inventory and a few other times) there are a number of <code>commands</code> Jamf School sends to the device to query it for information. One if these is <code>InstalledApplicationList</code> this returns a heap of data about the apps installed on the device, including a key <code>HasUpdateAvailable</code>, which is <code>true</code> or <code>false</code> and the <code>ExternalVersionIdentifier</code>. Basically the ID of the device in the App Store</p>
+<p>Firstly when a device does a <em>full</em> check in with Jamf School (this happens once a day, through clicking <code>refresh device</code> on the device inventory and a few other times) there are a number of <code>commands</code> Jamf School sends to the device to query it for information. One if these is <code>InstalledApplicationList</code> this returns a heap of data about the apps installed on the device, including a key <code>HasUpdateAvailable</code>, which is <code>true</code> or <code>false</code> and the <code>ExternalVersionIdentifier</code>. Basically the ID of the App in the App Store.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+<p>If you really want to to dig into this a little more I&rsquo;ll guide you to the Apple Developer Docs for <a href="https://developer.apple.com/documentation/devicemanagement/installedapplicationlistresponse/installedapplicationlistitem" target="_blank">InstalledApplicationListResponse.InstalledApplicationListItem</a>
+ and note this specific call out</p>
+<blockquote>
+<p>A newer version of an app might not be available for installation on the device for a variety of reasons. A common reason is that the device’s operating system version or hardware is incompatible with the available version of the app.</p></blockquote>
+
+</span>
+</div>
+
 <p>The second part of the puzzle is Jamf School&rsquo;s App record(s) getting updated from Apple School Manager (actually its the App Store but I&rsquo;m splitting hairs), specifically it&rsquo;s version number changing. If the version number in the App record in the Jamf School database hasn&rsquo;t changed, and the device hasn&rsquo;t reported its <code>InstalledApplicationList</code> data, Jamf School wont queue up that all important <code>InstallApplicationCommand</code> <em>(this is a simplified version of events, Im sure there is some other logic here but the point is we need both sides of the coin, as it were, before Jamf School is able to queue the update)</em></p>
 <p>&hellip;we know from above when the device reports the <code>HasUpdateAvailable</code>, so the follow on question should be</p>
 <p><em>&ldquo;So when does Jamf School sync with ASM to pull the latest metadata about the apps its pulling through into the App Inventory?&rdquo;</em></p>
@@ -757,7 +785,7 @@ Again, just to point out, even with a Caching Server, pushing all updates to all
 <li>Requires device to have successfully reported back details of a <code>InstalledApplicationList</code> command <br></li>
 <li>Scheduled updates require a device to check in during the schedule window, making the window too short or having device with not network connections could see devices rarely get app updates <br></li>
 <li>Perception that auto updates is not working when navigating to <code>Apps</code> -&gt; <code>Updates</code> page <br></li>
-<li>Need for communication for end users and other admins on expected behaviour</li>
+<li>Need for communication to end users and other admins on expected behaviour</li>
 </ul>
 
 <h3 id="vpp-app-update-options">
@@ -815,7 +843,7 @@ Again, just to point out, even with a Caching Server, pushing all updates to all
   </div>
   
   
-  <div>Last update May 22, 2025</div>
+  <div>Last update May 23, 2025</div>
   
 </footer>
 

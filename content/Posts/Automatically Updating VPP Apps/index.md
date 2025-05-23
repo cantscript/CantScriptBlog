@@ -161,7 +161,12 @@ The question we should be asking is how does Jamf School know when to send the d
 
 This is two fold. 
 
-Firstly when a device does a *full* check in with Jamf School (this happens once a day, through clicking `refresh device` on the device inventory and a few other times) there are a number of `commands` Jamf School sends to the device to query it for information. One if these is `InstalledApplicationList` this returns a heap of data about the apps installed on the device, including a key `HasUpdateAvailable`, which is `true` or `false` and the `ExternalVersionIdentifier`. Basically the ID of the device in the App Store
+Firstly when a device does a *full* check in with Jamf School (this happens once a day, through clicking `refresh device` on the device inventory and a few other times) there are a number of `commands` Jamf School sends to the device to query it for information. One if these is `InstalledApplicationList` this returns a heap of data about the apps installed on the device, including a key `HasUpdateAvailable`, which is `true` or `false` and the `ExternalVersionIdentifier`. Basically the ID of the App in the App Store.
+
+{{< callout >}}
+If you really want to to dig into this a little more I'll guide you to the Apple Developer Docs for [InstalledApplicationListResponse.InstalledApplicationListItem](https://developer.apple.com/documentation/devicemanagement/installedapplicationlistresponse/installedapplicationlistitem) and note this specific call out
+> A newer version of an app might not be available for installation on the device for a variety of reasons. A common reason is that the device’s operating system version or hardware is incompatible with the available version of the app.
+{{< /callout >}}
 
 The second part of the puzzle is Jamf School's App record(s) getting updated from Apple School Manager (actually its the App Store but I'm splitting hairs), specifically it's version number changing. If the version number in the App record in the Jamf School database hasn't changed, and the device hasn't reported its `InstalledApplicationList` data, Jamf School wont queue up that all important `InstallApplicationCommand` _(this is a simplified version of events, Im sure there is some other logic here but the point is we need both sides of the coin, as it were, before Jamf School is able to queue the update)_
 
@@ -214,7 +219,7 @@ Oh I almost forgot! while we're talking about queuing up and deploying the `Inst
 * Requires device to have successfully reported back details of a `InstalledApplicationList` command <br>
 * Scheduled updates require a device to check in during the schedule window, making the window too short or having device with not network connections could see devices rarely get app updates <br>
 * Perception that auto updates is not working when navigating to `Apps` -> `Updates` page <br>
-* Need for communication for end users and other admins on expected behaviour
+* Need for communication to end users and other admins on expected behaviour
 
 
 ### VPP App Update Options
