@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="content-language" content="en-us" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  
+  
+  <title>macOS Authenticated Enrolment Passthrough in Jamf School &middot; CantScript</title>
+  <meta name="title" content="macOS Authenticated Enrolment Passthrough in Jamf School &middot; CantScript" />
+  
+
+  
+  
+  <meta name="description" content="Creating a user experience with the least amount of friction is key to a great onboarding and theres nothing more grinding than entering credentials over and over. Find out how to passthrough user details from an Authenticated Enrolment to Jamf Connect." />
+  
+  <meta name="keywords" content="Profiles, Workflows, Identity, " />
+  <link rel="canonical" href="http://localhost:1313/posts/macos-authenticated-enrollment-passthrough-in-jamf-school/" />
+
+  
+
+  
+    
+        <link rel="stylesheet" href="/css/theme.css">
+    
+  
+    
+        <link rel="stylesheet" href="/css/main.css">
+    
+  
+    
+  
+
+
+
+  
+  
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="CantScript" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+  
+
+  <meta property="og:url" content="http://localhost:1313/posts/macos-authenticated-enrollment-passthrough-in-jamf-school/">
+  <meta property="og:site_name" content="CantScript">
+  <meta property="og:title" content="macOS Authenticated Enrolment Passthrough in Jamf School">
+  <meta property="og:description" content="Creating a user experience with the least amount of friction is key to a great onboarding and theres nothing more grinding than entering credentials over and over. Find out how to passthrough user details from an Authenticated Enrolment to Jamf Connect.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-06-10T00:00:00+00:00">
+    <meta property="article:tag" content="Profiles">
+    <meta property="article:tag" content="Workflows">
+    <meta property="article:tag" content="Identity">
+
+  
+    <meta property="og:image" content="http://localhost:1313/jcbanner.png" />
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="macOS Authenticated Enrolment Passthrough in Jamf School">
+  <meta name="twitter:description" content="Creating a user experience with the least amount of friction is key to a great onboarding and theres nothing more grinding than entering credentials over and over. Find out how to passthrough user details from an Authenticated Enrolment to Jamf Connect.">
+
+  
+    <meta name="twitter:image" content="http://localhost:1313/jcbanner.png" />
+  
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script
+      defer
+      type="text/javascript"
+      src="/lib/fuse/fuse.min.1f56d60a7738743270762a2aa4e0a453be99c4476f06f3b2f51f4377d12a7ed973420f76a308d7e4855d88ec34d25940c9015464934faf30e7599fe566d7f6e4.js"
+      integrity="sha512-H1bWCnc4dDJwdioqpOCkU76ZxEdvBvOy9R9Dd9EqftlzQg92owjX5IVdiOw00llAyQFUZJNPrzDnWZ/lZtf25A=="
+    ></script>
+  
+
+
+
+  
+  
+
+
+  
+  
+  
+  
+  
+
+  
+  
+  
+    <link rel="preload" href="http://localhost:1313/fonts/Ubuntu-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+
+  
+
+  
+
+  
+  <script>
+    const siteTheme = "dark";
+    let savedTheme = localStorage.getItem('theme') || siteTheme;
+    if (savedTheme == 'auto') {
+      if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
+        savedTheme = 'dark';
+      }
+    }
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  </script>
+</head>
+
+  <body>
+    <div class="content">
+      <header>
+    
+    <a class="title" href="/">
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+
+  
+    <img loading="" 
+
+    
+      
+        
+        
+        
+          
+          
+          
+            src="/img/CantScript_LogoOnlyv3_hu_8dd51e941f19ba6f.png"
+          
+        
+      
+    
+      alt="Site Logo" />
+  
+
+
+
+
+    </a>
+    
+    <div class="header-cntr">
+    <a class="title" href="/">
+    <span>CantScript</span>
+    </a>
+  <div class="menu">
+  <nav id="main-menu" class="mm-normal">
+    <ul>
+    <li> <button id="mob-x-icon" class="menu-btn" arial-label="x-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+ </button> </li>
+    
+      <li><a href="/posts/" aria-label="posts">
+      Posts</li></a>
+    
+      <li><a href="/about/" aria-label="about">
+      About</li></a>
+    
+      <li><a href="/more/" aria-label="more">
+      More</li></a>
+    
+      <li><a href="https://github.com/cantscript" aria-label="github">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://www.linkedin.com/in/anthony-darlow-a795b294/" aria-label="linkedin">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://macadmins.slack.com/team/UA73QAKJL" aria-label="slack">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+    </ul>
+  </nav>
+    <div class="side-menu">
+    
+<button id="search-open" class="menu-btn" aria-label="Search button">
+  
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+</button>
+
+<div id="search-container" data-url="http://localhost:1313/">
+  <div class="search">
+    <div class="panel">
+      <form>
+        
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+        <input type="search" id="search-query" placeholder="Search" tabindex=0 autocomplete="off"/>
+        <button id="search-close" title="Cancel (ESC)">
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+
+        </button>
+      </form>
+    </div>
+    <ul id="search-results">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+    <div id="search-overlay"></div>
+  </div>
+</div>
+
+    
+    <button id="theme-switcher" class="menu-btn" aria-label="Theme switcher">
+      <div id="moon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+
+
+      </div>
+      <div id="sun">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+
+
+      </div>
+    </button>
+    
+    </div>
+    <button id="mob-hb-icon" class="menu-btn" aria-label="Hamburger icon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+
+
+    </button>
+  </div>
+  <script>
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('mob-hb-icon');
+    const closeBtn = document.getElementById('mob-x-icon');
+    const mainMenu = document.getElementById('main-menu');
+    const body = document.body;
+
+    openBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-normal', 'mm-mobile-open');
+        closeBtn.style.display = 'block';
+        body.style.overflow = 'hidden';
+    });
+    closeBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-mobile-open', 'mm-normal');
+        closeBtn.style.display = 'none';
+        body.style.overflow = '';
+    });
+    })
+  })();
+  </script>
+  
+  <script>
+  (function() {
+    var mainmenu = document.getElementById('main-menu');
+    if (!mainmenu) return;
+
+    var path = window.location.pathname;
+    var links = mainmenu.querySelectorAll('a');
+
+    links.forEach(function(link) {
+      if (link.getAttribute('href') === path) {
+        link.classList.add('active');
+      }
+    });
+  })();
+  </script>
+  
+</div>
+</header>
+
+      <main>
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+    <img loading="eager" class="cover-img"
+
+    
+      
+        src="/posts/macos-authenticated-enrollment-passthrough-in-jamf-school/jcbanner.png"
+      
+    
+      alt="Cover Image" />
+  
+
+
+
+
+
+
+
+
+
+<ul class="breadcrumbs">
+  <li><a href="http://localhost:1313/">
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+
+
+</a></li>
+  
+    
+    
+      <li><a href="http://localhost:1313/posts/">Posts</a></li>
+    
+    
+  
+    
+  
+</ul>
+
+
+
+<h1 class="pg-title">macOS Authenticated Enrolment Passthrough in Jamf School</h1>
+
+
+<div class="meta">
+  
+
+
+
+<p>
+
+
+  
+  
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2a1,1,0,0,1,1,1Z"/></svg>
+
+
+</span>
+  Posted on <time datetime="2025-06-10T00:00:00&#43;00:00">Jun 10, 2025</time>
+  
+  
+  
+
+
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM3.00683 12C3.00683 16.9668 7.03321 20.9932 12 20.9932C16.9668 20.9932 20.9932 16.9668 20.9932 12C20.9932 7.03321 16.9668 3.00683 12 3.00683C7.03321 3.00683 3.00683 7.03321 3.00683 12Z" fill="currentColor"/>
+<path d="M12 5C11.4477 5 11 5.44771 11 6V12.4667C11 12.4667 11 12.7274 11.1267 12.9235C11.2115 13.0898 11.3437 13.2343 11.5174 13.3346L16.1372 16.0019C16.6155 16.278 17.2271 16.1141 17.5032 15.6358C17.7793 15.1575 17.6155 14.5459 17.1372 14.2698L13 11.8812V6C13 5.44772 12.5523 5 12 5Z" fill="currentColor"/>
+</svg>
+
+
+</span>
+  
+    14 mins
+  
+
+
+</p>
+
+  
+
+
+<p>
+  <span class="meta-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M48 32H197.5C214.5 32 230.7 38.74 242.7 50.75L418.7 226.7C443.7 251.7 443.7 292.3 418.7 317.3L285.3 450.7C260.3 475.7 219.7 475.7 194.7 450.7L18.75 274.7C6.743 262.7 0 246.5 0 229.5V80C0 53.49 21.49 32 48 32L48 32zM112 176C129.7 176 144 161.7 144 144C144 126.3 129.7 112 112 112C94.33 112 80 126.3 80 144C80 161.7 94.33 176 112 176z"/></svg>
+
+
+ </span>
+  
+  <a class="tag" href="/tags/profiles/">Profiles</a>
+  
+  <a class="tag" href="/tags/workflows/">Workflows</a>
+  
+  <a class="tag" href="/tags/identity/">Identity</a>
+  
+</p>
+
+
+
+</div>
+
+
+
+
+  <div class="toc">
+    <details >
+      <summary accesskey="c" title="(Alt+C)">
+        Table of Contents
+      </summary>
+      <div class="toc-innr">
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#setting-the-scene">Setting The Scene</a></li>
+        <li><a href="#so-what-is-the-actual-issue-here">So What Is The Actual Issue Here?</a></li>
+        <li><a href="#creating-a-better-experience">Creating A Better Experience</a></li>
+        <li><a href="#bill-of-materials">Bill Of Materials</a></li>
+        <li><a href="#additional-jamf-connect-profile">Additional Jamf Connect Profile</a></li>
+        <li><a href="#assigning-the-additional-jamf-connect-profile">Assigning The Additional Jamf Connect Profile</a></li>
+        <li><a href="#a-note-on-users-in-jamf-school">A Note On Users in Jamf School</a></li>
+        <li><a href="#quick-thanks">Quick Thanks</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+    </details>
+  </div>
+  
+
+
+
+<p>Creating a frictionless onboarding experience can be the key to a successful deployment, especially if your end users are driving the onboarding. As an Admin we are well aware of the amount of times a user might be asked to <em>&ldquo;log in&rdquo;</em> or enter their credentials. That might be before the user even actually logs in to the user space, where they&rsquo;ll likely get asked to login to various apps as well. Now, I know that <code>SSOe</code> can help with some of this once in the user space but for this blog, <code>SSOe</code> is out of scope.</p>
+<p>What I want to focus on in this blog is situations where an admin is using <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Automated_Device_Enrollment_Experience_Customization.html" target="_blank">Authenitcated Enrollment</a>
+, <a href="https://learn.jamf.com/en-US/bundle/jamf-connect-documentation-current/page/Identity_Provider_Integrations.html" target="_blank">Jamf Connect</a>
+ and a supported idP, which for this particular workflow must be Entra.</p>
+
+<h3 id="setting-the-scene">
+  Setting The Scene
+  
+</h3>
+<p>Incase Authenticated Enrolments or Jamf Connect are new to you, lets quickly cover them off</p>
+<p><strong>Authenicated Enrollment</strong> <br>
+When enrolling a device using <em>Automated Device Enrollment</em> an Admin can choose for the user to authenticate. If the user enrolling the device doesn&rsquo;t have a user account with the chosen provider or isn&rsquo;t able to provide the correct credentials then the enrolment cannot be completed. This stops unauthorised users being able to enrol school owned devices or said another way, if the devices goes &ldquo;missing&rdquo;, gets wiped and ends up on the second hand market, unless you have a valid user account in the schools directory the device is a brick.</p>
+<p>Theres a second advantage to using an authenticated enrolment, which if i&rsquo;m honest is likely the main reason for using this feature, is that upon successful authentication, the device is then assigned to the authenticated user in Jamf School. Depending on the setup in Jamf School, this can then trigger the rest of the onboarding experience that is unique to that user. For example getting a different configuration if they are a teacher than a student or if the student is in Year 7 or Year 10.</p>
+<p>To try and keep on topic, I&rsquo;m not going to cover the steps to configure the <code>Authenication</code> module in Jamf School or how to build an <code>ADE Profile</code> with Authenticated Enrolment configured as it is well documented. Jamf School can point to Entra, Google, LDAP or its internal directory for this feature. <br></p>
+<ul>
+<li><a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Automated_Device_Enrollment_Experience_Customization.html#ariaid-title5" target="_blank">Customising Enrollments</a>
+ <br></li>
+<li><a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Microsoft_Azure_Integration.html#ID-0000cc19" target="_blank">Microsoft Entra ID Integration</a>
+ <br></li>
+<li><a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Google_Sign-In_Setup.html" target="_blank">Google Sign-In Setup</a>
+ <br></li>
+</ul>
+<p><strong>Jamf Connect</strong> <br>
+In the context of an onboarding, Jamf Connect creates a local macOS account based on idP details and continues to keep the password in sync. Essentially meaning that the local user account name and password match that of the one at the provider <em>(there are many <a href="https://learn.jamf.com/en-US/bundle/jamf-connect-documentation-current/page/Identity_Provider_Integrations.html" target="_blank">idP&rsquo;s Connect works</a>
+ with)</em> and if the password is changed at the provider the change is synced to the local account too.</p>
+<p>Again, to keep on topic, I wont be covering how to configure Jamf Connect with a given idP <em>(although I&rsquo;ll be using Entra in my example and will link to that below)</em> or how to configure a basic deployment with Jamf School. However, if you need this guidance I&rsquo;ve listed some useful documentation below. <br></p>
+<ul>
+<li><a href="https://learn.jamf.com/en-US/bundle/jamf-connect-documentation-current/page/Integrating_Jamf_Connect_with_Microsoft_Azure_AD.html" target="_blank">Integrating Jamf Connect with Microsoft Entra ID</a>
+ <br></li>
+<li><a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Jamf_Connect_Deployment_with_Jamf_School.html" target="_blank">Jamf Connect Deployment with Jamf School</a>
+ <br></li>
+</ul>
+
+<h3 id="so-what-is-the-actual-issue-here">
+  So What Is The Actual Issue Here?
+  
+</h3>
+<p>Now the we know what the two components we&rsquo;ll be working with do, lets talk about the user experience while onboarding their device.</p>
+<p>Assuming for a second that I am the user, a teacher, first day on the job. I get given a new MacBook, along with a new username and password. Im told I&rsquo;ll be able to set it up myself either on site or at home. I turn it on, choose my language, location and connect to wifi. The next screen I see it the <code>enrolment screen</code> and I select <code>enrol</code>.</p>
+<p>Since the admin has decided on an authenticated enrolment, the next screen I get presented with is a Microsoft looking login screen where I&rsquo;m asked for my credentials.</p>
+<div style="text-align: center;">
+    <img src="device-enrolmentsteps.png" alt="Enrolment Steps" style="max-width: 80%; height: auto;">
+</div>
+<p>I was given them at the same time as my MacBook so I log in. All is good and the enrolment continues, I may or may not set up things like location services, Apple ID, touchID etc etc.</p>
+<p>Once thats all over I land at the login window, which is Jamf Connect and presented with another Microsoft looking login screen&hellip;.the exact same one as I&rsquo;ve already logged into. Or at least to me, as a user it looks like the same one</p>
+<div style="text-align: center;">
+    <img src="device-jcnormalscreen.jpeg" alt="Jamf Connect regular login" style="max-width: 80%; height: auto;">
+</div> 
+<p>This is the 2nd time I&rsquo;ve had to log in within a few minutes and as a user Im confused why I&rsquo;ve had to log in to what looks like the same thing again. Im also annoyed that I&rsquo;ve had to enter my whole username and password, again.</p>
+<p>For some, this might not sound like too much but remember there are lots of users in Education that are either not super confident with IT or, in the case of students, not yet IT proficient enough to enter a username and password correct multiple times.</p>
+<p>As an Admin, we know that although the user thinks they&rsquo;ve logged into the same thing, since they&rsquo;ve seen the same Microsoft login window, what they&rsquo;ve actually done is prove they are a valid user to further the enrolment and then created a local user account on the device. The reason they got 2 log in windows that looked the same (in that they were that Microsoft looking window) was because both the <code>Authentication</code> module in Jamf School and the Jamf Connect <code>configuration</code> are pointing to the same idP, in our case Entra.</p>
+
+<h3 id="creating-a-better-experience">
+  Creating A Better Experience
+  
+</h3>
+<p>Since both components are pointing to the same idP wouldn&rsquo;t it be better if after the user has authenticated at enrolment that these details are are passed onto Jamf Connect so that they didn&rsquo;t need to go through the whole experience again?</p>
+<p>I think yes!</p>
+<div style="text-align: center;">
+    <img src="PassthroughAuth.gif" alt="Jamf Connect with Prefilled Data" style="max-width: 80%; height: auto;">
+</div>
+<p>If you&rsquo;ve ever used Jamf Pro, you&rsquo;ll know that this very thing is achievable in product via a tick box at a pre-stage enrolment. Just because that same option isn&rsquo;t available in an ADE profile in Jamf School, it doesn&rsquo;t mean we cannot achieve this same result.</p>
+<div style="text-align: center;">
+    <img src="device-connectPreFill.jpeg" alt="Jamf Connect with Prefilled Data" style="max-width: 80%; height: auto;">
+</div>
+<p>The key to this workflow is actually <code>variables</code> in a configuration profile. If Jamf School variables are not something you are familiar with, then take a look at this <a href="https://cantscript.com/posts/using-jamf-school-variables-in-scripts/" target="_blank">previous blog</a>
+ that explains how these work.</p>
+<p>In a nutshell we are going to create a workflow that does the following</p>
+<ul>
+<li>Authenticates the user at enrolment <br></li>
+<li>Assigns the user to that device <br></li>
+<li>Delivers all required profiles and packages for Jamf Connect <br></li>
+<li>Delivers an additional profile to the <code>com.jamf.connect.login</code> domain, where certain user variables have been substituted for the assigned users real details <br></li>
+<li>Jamf Connect appears and already has the account name and username filled (based on the Authenticated Enrolment) <br></li>
+<li>User only needs to enter the password at the Jamf Connect window, which sets the local account password <br></li>
+</ul>
+
+<h3 id="bill-of-materials">
+  Bill Of Materials
+  
+</h3>
+<p>Before looking at the additional configuration profile for the rest of the blog we&rsquo;ll assume that you have the following configuration items in place</p>
+<p><strong>Azure / Entra ID</strong> <br></p>
+<ul>
+<li>Enterprise App configured correctly for Jamf Connect</li>
+</ul>
+<p><strong>Jamf School Configuration</strong> <br></p>
+<ul>
+<li>Authentication Module configured to work with Entra ID Enterprise App</li>
+</ul>
+<p><strong>Jamf School Items</strong> <br></p>
+<ul>
+<li>Jamf Connect pkg uploaded <br></li>
+<li>Jamf Connect login and menu bar configuration profiles uploaded, configured as required <br></li>
+<li><em>(Optional)</em> Jamf Connect branding pkg <br></li>
+<li>ADE profile <br></li>
+<li>ADE profile assigned to target devices</li>
+</ul>
+<p><strong>ADE Profile Options</strong> <br></p>
+<ul>
+<li>with Authenication selected <br></li>
+<li>with assign authenticated user selected <br></li>
+<li>Connect login and menu bar configuration profiles assigned <br></li>
+<li>Connect pkg assigned <br></li>
+<li><em>(Optional)</em> Jamf Connect branding pkg assigned <br></li>
+</ul>
+<p>If you haven&rsquo;t got any of this in place, use the documentation listed above to configure these items before moving on to the next section.</p>
+
+<h3 id="additional-jamf-connect-profile">
+  Additional Jamf Connect Profile
+  
+</h3>
+<p>As mentioned above the key here is an additional piece of Jamf Connect login configuration. If this is in place at the Jamf Connect login window, rather than presenting the user with idP login experience the account name and username is pre-filled with the assigned users details. Asking the user to only enter their password, which must be the same as their idP before they can proceed (this means the local account username and password is in sync with the idP from the very off set)</p>
+<p>In order to pre-fill the correct details Jamf Connect Login expects the keys <code>EnrollmentRealName</code> and <code>EnrollmentUserName</code> in its preference domain <code>com.jamf.connect.login</code>.</p>
+<p><code>EnrollmentRealName</code> is the <code>Full Name</code> of the local account. Usually this is the name that is more friendly, for example <em>Ant Darlow</em></p>
+<p><code>EnrollmentUserName</code> is the <code>Account Name</code> of the local account, the one that is used for the user home folder. Usually this would be something more like <em>ant.darlow</em> since everything must be lower case and with no spaces. In the case of Jamf Connect, this must be the full email address (UPN) as you would type if you were entering it in the Microsoft login window, e.g. <em>ant.darlow@example.com</em>. The local Account name / home folder then becomes the part before the <code>@</code>. So although you must provide the full UPN of <em>ant.darlow@example.com</em> the home folder and account name becomes the more manageable <em>ant.darlow</em></p>
+<p>In a nutshell, what we are saying here is we need to offer up the <code>Full Name</code> and the <code>Email</code> of the user to Jamf Connect through this configuration. Of course we&rsquo;re not going to create a profile for each and every user with their data hardcoded, we&rsquo;ll use <a href="https://cantscript.com/posts/using-jamf-school-variables-in-scripts/" target="_blank">Jamf School variables</a>
+. We can simply use <code>%FullName%</code> and <code>%Email%</code> variables in the profile which will be sustituded for the assigned users real values, which would look something like this</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>	<span style="color:#f92672">&lt;key&gt;</span>EnrollmentRealName<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&lt;string&gt;</span>%FullName%<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&lt;key&gt;</span>EnrollmentUserName<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&lt;string&gt;</span>%Email%<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span></code></pre></div>
+
+
+<p>I&rsquo;ve wrapped these up into the required <a href="https://github.com/cantscript/macOSAuthenticatedEnrolmentPassthroughinJamfSchool/blob/main/Jamf%20Connect%20Enrollment%20User%20for%20School.mobileconfig" target="_blank">profile</a>
+ that you can find over on my <a href="https://github.com/cantscript" target="_blank">GitHub</a>
+. Since it relies completely on variables you can use this in your environment as is. The only thing that you might want to change is the following with your company details.</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>			<span style="color:#f92672">&lt;key&gt;</span>PayloadOrganization<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&lt;string&gt;</span>Your Company<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span></code></pre></div>
+
+
+<p>To edit the details you could use something generic like <a href="https://www.barebones.com/products/bbedit/" target="_blank">BBEdit</a>
+ or <a href="https://coderunnerapp.com" target="_blank">Coderunner</a>
+ or something more specific to creating preferences such as <a href="https://www.fatcatsoftware.com/plisteditpro/" target="_blank">PlistEdit Pro</a>
+.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+If you&rsquo;re not sure how to upload a custom payload I cover it in <a href="https://cantscript.com/posts/using-jamf-school-variables-in-scripts/" target="_blank">this blog</a>
+ under the heading &ldquo;Deploy Custom Profile with Jamf School&rdquo;
+</span>
+</div>
+
+
+<h3 id="assigning-the-additional-jamf-connect-profile">
+  Assigning The Additional Jamf Connect Profile
+  
+</h3>
+<p>The last part of the puzzle is to assign this profile to your target devices (assuming you have everything in the BOM in place). This could be done in 2 ways depending on your deployment</p>
+<p><strong>Option 1: Scope to Device Group Along with Other Configuration</strong> <br>
+If you are anything like me you&rsquo;ll have a main <em>macOS Configuration and Apps</em> group where you assign your core configurations and apps for macOS regardless of who owns the device. If not I&rsquo;m sure you&rsquo;ll have something similar.</p>
+<p>You can add the additional Jamf Connect Profile to this group or any group that targets the macOS devices that you want to run this flow on&hellip;.which will be the same ones as your <strong><em>Authenicated Enrolment ADE Profile</em></strong> is scoped to.</p>
+<p>This feels like the safe option since we know the profile will 100% land on the device after the user assignment from the authenticated enrolment has been reported back to Jamf School and therefore the variables substituted correctly.</p>
+<p>Now the <em>&ldquo;problem&rdquo;</em> with this method is that depending on what setup assistance steps you skip you might end up on the Jamf Connect screen before the additional profile has landed on the device. This will result in the normal &ldquo;please enter your Entra details&rdquo; page for a few moments, until the profile does land. In those few moments, a user with fast fingers might have already entered their details and the purpose of this flow completely missed.</p>
+<p>If your onboarding flow includes multiple screens and asks users to sign in with Apple ID or configure TouchID as examples, or use an onboarding tool like <a href="https://github.com/jamf/Setup-Manager" target="_blank">Setup Manager</a>
+, you will be fine.</p>
+<p>However, if you skip everything you can during setup assistant, option 2 will be the better choice.</p>
+<p><strong>Option 2: Add the Additional Connect Profile as an ADE Profile</strong> <br>
+Deploying the additional Connect Configuration Profile as part of the ADE profile, along with all other Connect configuration ensures that the profile lands on the device right away. This means that even if you skip all setup assistant panes the profile will be on the device.</p>
+<p>My concern with this was that the profile lands on the device before the user assignment is updated for the device record in Jamf School. Therefore the <code>%FullName%</code> and <code>%Email%</code> variables aren&rsquo;t substituted and are instead seen as literal strings. This would mean that Jamf Connect would set the <code>Real Name</code> as <code>%FullName%</code> etc. In turn the details wouldn&rsquo;t match with any Entra user and the user would never be able to log in, causing support tickets for the IT dept.</p>
+<p>However, based on my testing and since the authentication happens before the enrolment profile is available the user assignment is reported back to Jamf School in the first few transactions between the device and the database. This also reflects in the console, a device that uses authenticated enrolment and assigns the user to the device shows the correct user as soon as it shows up in the device inventory. This happens before any ADE packages or profile <code>commands</code> are issued to the device, meaning the variables will get substituted correctly.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Remember, as per the <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Jamf_Connect_Deployment_with_Jamf_School.html" target="_blank">Jamf School Documentation</a>
+, any profile assigned via an ADE profile must also be scoped to the device in the regular way to maintain installation on the device
+</span>
+</div>
+
+<p>Thats really it, a simple two key profile that can change the user experience for the better!</p>
+
+<h3 id="a-note-on-users-in-jamf-school">
+  A Note On Users in Jamf School
+  
+</h3>
+<p>One of the biggest and most popular topics I talk about and consult on in my day job is that of users (or identities as I like to refer to them as). In my opinion getting this right is the key to a great Jamf School deployment but getting users into Jamf School isn&rsquo;t trivial.</p>
+<p>I could easily write 7 or 8 blog posts on users, how many ways we can pull them into School and why / how each way brings an advantage. So Im not going to get into any of that right now but if you want to dive into this in more detail, I suggest the second half of my <a href="https://www.youtube.com/watch?v=ET0AxMAB3wY" target="_blank">JNUC 2024 talk</a>
+</p>
+<p>In relation to user assignments and authenticated enrolments for this flow, the thing you need to be aware of is, depending on if you import the user before enrolment or if the user is imported once authenticated; you&rsquo;ll get different values in the <code>username</code> field of the user record in Jamf School.</p>
+<p>This might not be important for everyone, but if you are importing / syncing your users into Jamf School from various sources and appending data to user records, having the correct <code>username</code> prevents the creation of additional users (instead of matching user records).</p>
+<p>Importing / Sync users from a source, for example ASM will use the the prefix of the UPN (the part before the <code>@</code>) as the username. When using CSV or API the admin can define the username to match this prefix (<em>ant.darlow</em> for example) and when syncing with LDAP we can map the correct value to ensure we get a desired username (which again will most likely be something like <em>ant.darlow</em>). This makes matching users and appending data to the user record easy.</p>
+<div style="text-align: center;">
+    <img src="console-usersync.png" alt="Username assigned when synced from another source" style="max-width: 80%; height: auto;">
+</div>
+<p>If the user isn&rsquo;t already sync&rsquo;d or imported into Jamf School before a user performs an authenticated enrolment is it imported on a successful authentication. The username value is populated with the UPN, remembering that this is the full &ldquo;email&rdquo; address, <em>ant.darlow@example.com</em>. There is no way for us to remap this&hellip;this is the way. If / when a sync with another source happens, say ASM it will import a new user with the username <em>ant.darlow</em>, this could then causes issues with class assignments or other smart groups.</p>
+<div style="text-align: center;">
+    <img src="console-useradded.png" alt="Username assigned when added after authenication" style="max-width: 80%; height: auto;">
+</div>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+If none of this is ringing any bells for your deployment, don&rsquo;t worry about it but it very much is one of those if you know you know type of situations. And if you do know, make sure you&rsquo;ve got the right data in place before moving ahead with any authenticated enrolments, if you&rsquo;re not already using them
+</span>
+</div>
+
+
+<h3 id="quick-thanks">
+  Quick Thanks
+  
+</h3>
+<p>I&rsquo;ve been doing some work recently with Jamf Setup Manager in Jamf School <em>(Im excited to blog about this work, lets hope I get chance to write this up soon)</em> and as part of this work I paid more attention then ever before to the <a href="https://github.com/jamf/Setup-Manager/blob/main/Docs/JamfProConnect-SingleTouch.md#pre-set-user-for-jamf-connect" target="_blank">Pre-set user for Connect</a>
+ section and applied that to Jamf School.</p>
+<p>I believe that it was <a href="https://github.com/mvdbent" target="_blank">@mvdbent</a>
+ that wrote up that particular part of the documentation so a tip of the hat in his direction!</p>
+
+
+
+
+
+
+
+
+
+
+
+<nav class="pagenav">
+  
+  <div></div>
+  
+  
+    <a class="next" href="/posts/automatically-updating-vpp-apps/">
+      <span class="direction">Next »</span>
+      <br>
+      <span> Automatically Updating VPP Apps </span>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+      </main>
+      <footer>
+  <div class="copyright">
+     © 2025  Anthony Darlow 
+  </div>
+  
+  <div class="attribution">
+    Built with <a href="https://gohugo.io" target="_blank">Hugo</a> & <a href="https://github.com/mnjm/kayal" target="_blank">Kayal</a>
+  </div>
+  
+  
+  <div>Last update Jun 10, 2025</div>
+  
+</footer>
+
+    </div>
+    
+
+
+  
+
+
+
+  
+
+
+
+  
+    
+        <script src="/js/theme.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/codecopy.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/search.js"></script>
+      
+    
+  
+
+
+  </body>
+</html>
