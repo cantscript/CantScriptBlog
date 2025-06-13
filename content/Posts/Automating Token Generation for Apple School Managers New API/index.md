@@ -83,7 +83,7 @@ First things first, if you haven't already go and read [Barts blog](https://bart
 * `Key ID`
 
 **Step 1** <br>
-* Download the `AxM_API` folder from the GitHun repo.
+* Download the `AxM_API` folder from the [GitHub repo](https://github.com/cantscript/AxM_API).
 
 It doesn't matter where this folder lives on the device as long as you know where you keep it as this is going to become the working folder for all of your ASM API scripts
 
