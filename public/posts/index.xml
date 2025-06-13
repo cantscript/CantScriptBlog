@@ -6,8 +6,15 @@
     <description>Recent content in Posts on CantScript</description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Jun 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 13 Jun 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Automating Token Generation for Apple School Managers New API</title>
+      <link>http://localhost:1313/posts/automating-token-generation-for-apple-school-managers-new-api/</link>
+      <pubDate>Fri, 13 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/automating-token-generation-for-apple-school-managers-new-api/</guid>
+      <description>I was looking at the new documentation when an article from Bart Reardon landed on my desk. He&rsquo;d done the work already, so I went and automated the hell out of it</description>
+    </item>
     <item>
       <title>macOS Authenticated Enrolment Passthrough in Jamf School</title>
       <link>http://localhost:1313/posts/macos-authenticated-enrollment-passthrough-in-jamf-school/</link>
