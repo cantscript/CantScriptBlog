@@ -15,7 +15,7 @@ Here you'll find things that I've written, presented or worked on outside of thi
 {{< icon "edit" >}} [App Installers now available for Jamf School](https://www.jamf.com/blog/app-installers-jamf-school/) <br>
 {{< icon "edit" >}} [Explore Declarative Device Management in Jamf School](https://www.jamf.com/blog/declarative-device-management-jamf-school/)
 
-## JUNC
+## JNUC
 
 {{< icon "youtube" >}} [Scaling Success - Mastering Large-Scale Jamf School Configuration | JNUC 2024](https://www.youtube.com/watch?v=ET0AxMAB3wY&t=11s) <br>
 {{< icon "youtube" >}} [No Code-Low Code - Simplifying Security With Jamf School and Jamf Protect | JNUC 2024](https://www.youtube.com/watch?v=L5cOBr_513w&t=8s) <br>
