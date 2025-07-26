@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="content-language" content="en-us" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  
+  
+  <title>Advanced Setup Manager Flows in Jamf School, Part 1 &middot; CantScript</title>
+  <meta name="title" content="Advanced Setup Manager Flows in Jamf School, Part 1 &middot; CantScript" />
+  
+
+  
+  
+  <meta name="description" content="Jamf Setup Manager powered up macOS deployment workflows for Jamf School but what happens when you power up the power up? In this blog we look at some advanced Setup Manager workflows aimed specifically at Jamf School" />
+  
+  <meta name="keywords" content="Workflows, macOS, Scripting, Setup Manager, API, " />
+  <link rel="canonical" href="http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school/" />
+
+  
+
+  
+    
+        <link rel="stylesheet" href="/css/theme.css">
+    
+  
+    
+        <link rel="stylesheet" href="/css/main.css">
+    
+  
+    
+  
+
+
+
+  
+  
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="CantScript" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+  
+
+  <meta property="og:url" content="http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school/">
+  <meta property="og:site_name" content="CantScript">
+  <meta property="og:title" content="Advanced Setup Manager Flows in Jamf School, Part 1">
+  <meta property="og:description" content="Jamf Setup Manager powered up macOS deployment workflows for Jamf School but what happens when you power up the power up? In this blog we look at some advanced Setup Manager workflows aimed specifically at Jamf School">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-07-26T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-26T00:00:00+00:00">
+    <meta property="article:tag" content="Workflows">
+    <meta property="article:tag" content="MacOS">
+    <meta property="article:tag" content="Scripting">
+    <meta property="article:tag" content="Setup Manager">
+    <meta property="article:tag" content="API">
+
+  
+    <meta property="og:image" content="http://localhost:1313/JSMBanner.png" />
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Advanced Setup Manager Flows in Jamf School, Part 1">
+  <meta name="twitter:description" content="Jamf Setup Manager powered up macOS deployment workflows for Jamf School but what happens when you power up the power up? In this blog we look at some advanced Setup Manager workflows aimed specifically at Jamf School">
+
+  
+    <meta name="twitter:image" content="http://localhost:1313/JSMBanner.png" />
+  
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script
+      defer
+      type="text/javascript"
+      src="/lib/fuse/fuse.min.1f56d60a7738743270762a2aa4e0a453be99c4476f06f3b2f51f4377d12a7ed973420f76a308d7e4855d88ec34d25940c9015464934faf30e7599fe566d7f6e4.js"
+      integrity="sha512-H1bWCnc4dDJwdioqpOCkU76ZxEdvBvOy9R9Dd9EqftlzQg92owjX5IVdiOw00llAyQFUZJNPrzDnWZ/lZtf25A=="
+    ></script>
+  
+
+
+
+  
+  
+
+
+  
+  
+  
+  
+  
+
+  
+  
+  
+    <link rel="preload" href="http://localhost:1313/fonts/Ubuntu-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+
+  
+
+  
+
+  
+  <script>
+    const siteTheme = "dark";
+    let savedTheme = localStorage.getItem('theme') || siteTheme;
+    if (savedTheme == 'auto') {
+      if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
+        savedTheme = 'dark';
+      }
+    }
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  </script>
+  
+  
+
+<script src="https://cdn.counter.dev/script.js" data-id="4f40f3ac-7039-4087-b21a-96d3879a1fdc" data-utcoffset="1"></script>
+  
+</head>
+
+  <body>
+    <div class="content">
+      <header>
+    
+    <a class="title" href="/">
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+
+  
+    <img loading="" 
+
+    
+      
+        
+        
+        
+          
+          
+          
+            src="/img/CantScript_LogoOnlyv3_hu_8dd51e941f19ba6f.png"
+          
+        
+      
+    
+      alt="Site Logo" />
+  
+
+
+
+
+    </a>
+    
+    <div class="header-cntr">
+    <a class="title" href="/">
+    <span>CantScript</span>
+    </a>
+  <div class="menu">
+  <nav id="main-menu" class="mm-normal">
+    <ul>
+    <li> <button id="mob-x-icon" class="menu-btn" arial-label="x-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+ </button> </li>
+    
+      <li><a href="/posts/" aria-label="posts">
+      Posts</li></a>
+    
+      <li><a href="/about/" aria-label="about">
+      About</li></a>
+    
+      <li><a href="/more/" aria-label="more">
+      More</li></a>
+    
+      <li><a href="https://github.com/cantscript" aria-label="github">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://www.linkedin.com/in/anthony-darlow-a795b294/" aria-label="linkedin">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://macadmins.slack.com/team/UA73QAKJL" aria-label="slack">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+    </ul>
+  </nav>
+    <div class="side-menu">
+    
+<button id="search-open" class="menu-btn" aria-label="Search button">
+  
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+</button>
+
+<div id="search-container" data-url="http://localhost:1313/">
+  <div class="search">
+    <div class="panel">
+      <form>
+        
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+        <input type="search" id="search-query" placeholder="Search" tabindex=0 autocomplete="off"/>
+        <button id="search-close" title="Cancel (ESC)">
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+
+        </button>
+      </form>
+    </div>
+    <ul id="search-results">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+    <div id="search-overlay"></div>
+  </div>
+</div>
+
+    
+    <button id="theme-switcher" class="menu-btn" aria-label="Theme switcher">
+      <div id="moon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+
+
+      </div>
+      <div id="sun">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+
+
+      </div>
+    </button>
+    
+    </div>
+    <button id="mob-hb-icon" class="menu-btn" aria-label="Hamburger icon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+
+
+    </button>
+  </div>
+  <script>
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('mob-hb-icon');
+    const closeBtn = document.getElementById('mob-x-icon');
+    const mainMenu = document.getElementById('main-menu');
+    const body = document.body;
+
+    openBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-normal', 'mm-mobile-open');
+        closeBtn.style.display = 'block';
+        body.style.overflow = 'hidden';
+    });
+    closeBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-mobile-open', 'mm-normal');
+        closeBtn.style.display = 'none';
+        body.style.overflow = '';
+    });
+    })
+  })();
+  </script>
+  
+  <script>
+  (function() {
+    var mainmenu = document.getElementById('main-menu');
+    if (!mainmenu) return;
+
+    var path = window.location.pathname;
+    var links = mainmenu.querySelectorAll('a');
+
+    links.forEach(function(link) {
+      if (link.getAttribute('href') === path) {
+        link.classList.add('active');
+      }
+    });
+  })();
+  </script>
+  
+</div>
+</header>
+
+      <main>
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+    <img loading="eager" class="cover-img"
+
+    
+      
+        src="/posts/advanced-setup-manager-flows-in-jamf-school/JSMBanner.png"
+      
+    
+      alt="Cover Image" />
+  
+
+
+
+
+
+
+
+
+
+<ul class="breadcrumbs">
+  <li><a href="http://localhost:1313/">
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+
+
+</a></li>
+  
+    
+    
+      <li><a href="http://localhost:1313/posts/">Posts</a></li>
+    
+    
+  
+    
+  
+</ul>
+
+
+
+<h1 class="pg-title">Advanced Setup Manager Flows in Jamf School, Part 1</h1>
+
+
+<div class="meta">
+  
+
+
+
+<p>
+
+
+  
+  
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2a1,1,0,0,1,1,1Z"/></svg>
+
+
+</span>
+  Posted on <time datetime="2025-07-26T00:00:00&#43;00:00">Jul 26, 2025</time>
+  
+  
+  
+
+
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM3.00683 12C3.00683 16.9668 7.03321 20.9932 12 20.9932C16.9668 20.9932 20.9932 16.9668 20.9932 12C20.9932 7.03321 16.9668 3.00683 12 3.00683C7.03321 3.00683 3.00683 7.03321 3.00683 12Z" fill="currentColor"/>
+<path d="M12 5C11.4477 5 11 5.44771 11 6V12.4667C11 12.4667 11 12.7274 11.1267 12.9235C11.2115 13.0898 11.3437 13.2343 11.5174 13.3346L16.1372 16.0019C16.6155 16.278 17.2271 16.1141 17.5032 15.6358C17.7793 15.1575 17.6155 14.5459 17.1372 14.2698L13 11.8812V6C13 5.44772 12.5523 5 12 5Z" fill="currentColor"/>
+</svg>
+
+
+</span>
+  
+    20 mins
+  
+
+
+</p>
+
+  
+
+
+<p>
+  <span class="meta-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M48 32H197.5C214.5 32 230.7 38.74 242.7 50.75L418.7 226.7C443.7 251.7 443.7 292.3 418.7 317.3L285.3 450.7C260.3 475.7 219.7 475.7 194.7 450.7L18.75 274.7C6.743 262.7 0 246.5 0 229.5V80C0 53.49 21.49 32 48 32L48 32zM112 176C129.7 176 144 161.7 144 144C144 126.3 129.7 112 112 112C94.33 112 80 126.3 80 144C80 161.7 94.33 176 112 176z"/></svg>
+
+
+ </span>
+  
+  <a class="tag" href="/tags/workflows/">Workflows</a>
+  
+  <a class="tag" href="/tags/macos/">MacOS</a>
+  
+  <a class="tag" href="/tags/scripting/">Scripting</a>
+  
+  <a class="tag" href="/tags/setup-manager/">Setup Manager</a>
+  
+  <a class="tag" href="/tags/api/">API</a>
+  
+</p>
+
+
+
+</div>
+
+
+
+
+  <div class="toc">
+    <details >
+      <summary accesskey="c" title="(Alt+C)">
+        Table of Contents
+      </summary>
+      <div class="toc-innr">
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#the-state-of-play">The State of Play</a></li>
+        <li><a href="#the-problem-that-inspired-the-solution">The Problem that Inspired the Solution</a></li>
+        <li><a href="#colouring-outside-the-lines">Colouring Outside The Lines</a></li>
+        <li><a href="#forget-colouring-lets-take-a-big-thick-marker-to-the-page">Forget Colouring, Lets Take A Big Thick Marker To The Page</a></li>
+        <li><a href="#time-to-shred-the-page-clean-up-and-reduce-risk">Time To Shred The Page, Clean up and Reduce Risk</a></li>
+        <li><a href="#to-wrap-up-part-1">To Wrap Up Part 1</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+    </details>
+  </div>
+  
+
+
+
+<p>Hopefully by now most people in the Apple-Jamf community will have heard, seen or tested Jamf Setup Manager. If you&rsquo;ve spoken with me anytime in the last 18 or so months about macOS and Jamf School, you&rsquo;ll know it&rsquo;s a staple of my Jamf School onboarding flow.</p>
+<p>Just incase you&rsquo;ve not come across Jamf Setup Manager yet, in a nutshell its a macOS onboarding tool that can be ran at the Setup Assistant fundamentally changing the flow mac Admins have been using for years. Instead of turning on a device, having it enrol into MDM, configuring a local user, landing on the desktop and then providing a hold screen for the end user while we install all the apps needed; Setup Manager instead allows us to hold the user right after enrolment, meaning once the user is at the desktop they are ready to go.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+For more information about Jamf Setup Manager in general, visit the <a href="https://github.com/jamf/Setup-Manager" target="_blank">GitHub repo</a>
+. For more information about Setup Manager and how to use it with Jamf School, I recommend the second part of a blog I wrote on jamf.com: <a href="https://www.jamf.com/blog/part-2-customize-your-onboarding-experience-with-jamf-setup-manager/" target="_blank">Part 2: Customize your onboarding experience with Jamf Setup Manager</a>
+</span>
+</div>
+
+
+<h3 id="the-state-of-play">
+  The State of Play
+  
+</h3>
+<p>As I sit here and write today, Setup Manager is on version 1.3.1 and although there has been a number of advancements in just a few versions, one thing has stayed the same. The actions that you can perform with Jamf School and Jamf Pro are different. Now this is fine because it boils down to the fact that Jamf Pro is built differently to Jamf School and fundamentally these differences stem from the fact that Jamf Pro deploys a dedicated binary for macOS, and enables additional functionally over MDM.</p>
+<p>Now, this is all important for us to understand before we dig into the advanced workflows because without this context we don&rsquo;t know what we are aiming for.</p>
+<p>Thanks to the Jamf Pro Binary here are a few things that we can do extra with Jamf Setup Manager when using Jamf Pro <em>(this might not be the extensive list, but they are the things you need to know about to follow along with the rest of the blog)</em></p>
+<p><strong>1) Call A Policy</strong> <br>
+Jamf Pro has a concept called Polices. These are actions that go beyond MDM, there are many but the ones to focus on here are to <em>run a script</em> or <em>install a package</em> at a given trigger or on demand. Due to the ability to call a policy on demand, Jamf Setup Manager is able to invoke a policy in a programatic way. For example do X before calling policy Y <em>(which maybe runs a script that is related to X having been completed first)</em>.</p>
+<p><strong>2) Update Device Details</strong> <br>
+The Jamf Pro binary enables admins to use the command line to update device details. Again theres a host of things but think user assigned to the device, the asset tag, a department, the name of the device etc etc. Things that show up as part of the device inventory data about the device but not necessarily directly related to management items. Since the binary can be invoked via the command line for these tasks Jamf Setup Manager can update the inventory data for the device in the Jamf Pro device record.</p>
+<p>In part this then enables&hellip;..</p>
+<p><strong>3) A Single Touch, IT Driven workflow</strong> <br>
+Here we need to put ourselves in the mind of an IT professional who sets up a device on behalf of the end user and then maybe ships it off to them somewhere else on the planet (or in less exotic cases, the users desk).</p>
+<p>The Single touch IT Driven workflow enables the admin to enrol the device, ensure that all essential items are installed and assign the device to the correct end user all without ever needing to actually log into the device.</p>
+<p>If you are in an environment where your end users aren&rsquo;t setting up their own devices or are an MSP of some kind this &ldquo;white glove&rdquo; flow is a nice service to have.</p>
+<p>Maybe you&rsquo;re now finding yourself asking the question so what can be done with both Jamf School and Jamf Pro. Im glad you asked&hellip;.although the above is specific to Jamf Pro, both Pro and School can perform the below essential <code>enrolment actions</code></p>
+<ul>
+<li>Install apps using Installomator (which is built into Jamf Setup Manager)</li>
+<li>Check to see if a file exists in a file path (known as a watch path)</li>
+<li>Present a user with a wait tile for a given time with customized text and icons</li>
+<li>Run a shell command (a single line of code, as if ran in terminal)</li>
+</ul>
+<p>With these 4 <code>enrolment actions</code> alone and thanks to advancements in Jamf School in the form of <a href="https://www.jamf.com/blog/apple-automated-device-enrollment-jamf-school/" target="_blank">&ldquo;ADE Packages and Profile&rdquo;</a>
+ late last year, we can already majorly power up an macOS deployment.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Im not going to go into the benefits and how Jamf Setup Manager powers up macOS deployments here since I want to take the time to talk about the next steps, powering up the power up. However, <a href="https://www.linkedin.com/posts/anthony-darlow-a795b294_jamfschool-automateddeviceenrolment-jamfpro-activity-7275586073324314627-_vit?utm_source=share&amp;utm_medium=member_desktop&amp;rcm=ACoAABQFin0BPjEEXy3h1hmscBfGXhw7hZzLHXQ" target="_blank">this post</a>
+ pretty much sums up how awesomely simple it can be for an end user
+</span>
+</div>
+
+
+<h3 id="the-problem-that-inspired-the-solution">
+  The Problem that Inspired the Solution
+  
+</h3>
+<p>With that &ldquo;level setter&rdquo; and background knowledge out of the way, lets actually talk about how I got to working on these advanced workflows in the first place and what these advanced workflows actually are.</p>
+<p><strong>SPOILER ALERT</strong>: They are the extra things that we can do with Jamf Pro that I mentioned above, even if indirectly 😉</p>
+<p>I&rsquo;ve had recent interaction with an admin in an education environment using Jamf School. They already had a successful iPad deployment and were moving forward with their macOS fleet. They had created a macOS onboarding workflow but were coming up against some issues, I wont go into the full detail but there were two things we ended up tackling with Setup Manager.</p>
+<p><strong>Issue 1:</strong> The need to run a script at a chosen time <br>
+<strong>Issue 2:</strong> The need to update the device inventory at the end of Setup Manager flow</p>
+<p>Now looking at the above you&rsquo;ll quickly be able to see that if the admin was using Jamf Pro and Setup Manager, these are out of the box solutions.</p>
+<p>Lets be clear on the actual issues.</p>
+<p><strong>Running A Script</strong> <br>
+We can run a script with Jamf School as long as you have enabled the <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Scripts.html" target="_blank">scripting module</a>
+. Once you have added a script to Jamf School, there are a number of triggers to run the script from <code>once</code> (which runs the script pretty much right away) to <code>on a schedule</code> or to <code>login</code>.</p>
+<p>The issue here was that the admin required to run a script at a specific time, as an <code>enrolment action</code> and complete the task in the script (which for reference was WiFi / Network related) before moving onto the next <code>enrolment action</code> and continuing the the onboarding flow.</p>
+<p>With the in product script actions this just simply isn&rsquo;t possible.</p>
+<p><strong>Update The Device Inventory Data</strong> <br>
+Again its not like the device inventory data cannot be updated. Its updated in a number of ways and times</p>
+<ul>
+<li>Its updated when the device checks in (which is once every 4 hours, at time of writing)</li>
+<li>An admin can manually <code>refresh</code> the device through the console</li>
+<li>Users can initiate a <code>refresh</code> of their device through the Student or Teacher app</li>
+<li>An API endpoint is available to <code>refresh</code> the device and update the inventory data</li>
+</ul>
+<p>However, it cannot be done programatically like with Jamf Pro and the binary.</p>
+<p>Ultimately both problems stem from not being able to call actions programatically or at will within the Setup Manager <code>enrolment actions</code>.</p>
+
+<h3 id="colouring-outside-the-lines">
+  Colouring Outside The Lines
+  
+</h3>
+<p>Knowing that I wasn&rsquo;t able to perform these actions, I sat down and started to think. I knew that I had to think differently and, as I like to call it &ldquo;colour outside the lines&rdquo;. Essentially use Setup Manager in a way that perhaps wasn&rsquo;t intended but will still get the results.</p>
+<p>With the first issue in mind, that of running a script programatically, I looked at the <code>enrolment actions</code> that I did have available in Setup Manager. <code>Installomator</code> or a <code>Wait Tile</code> wouldn&rsquo;t be any use, neither really would a <code>Watchpath</code>. So then the only other option that was available was a <code>Shell Command</code>.</p>
+<p>A <code>Shell Command</code> is just a single command, yes it can have options and flags but its not a script, with variables and logic, running command after command. You cannot just add all the lines of a script (and in this case it was 50 or so lines in the script) to a single or even multiple <code>Shell Command</code> <code>enrolment action</code>.</p>
+<p>However, I can use a shell command to run a script that is already located on the device. As admins we do this all the time in terminal, something like</p>
+<p><code>/path/to/script/MyScript.sh</code></p>
+<p>This of course requires the script to be on the device, which it wont be at enrolment&hellip;.</p>
+<p>&hellip;Hang on&hellip;.</p>
+<p>Thanks to the <code>Automated Device Enrolment Packages &amp; Profiles</code> feature that was added to Jamf School, I <strong>can</strong> add packages to the device <strong>AT</strong> enrolment, meaning they are on the device by the time Setup Manager is running; and if we package the script and add it as an <code>Automated Device Enrolment Package</code>, I can use the <code>Shell Command</code> <code>enrolment action</code> to run the script when I need it, just like calling a policy with Jamf Pro.</p>
+<p>Bingo! Now the admin I was working with can run the &ldquo;WiFi checker&rdquo; as the first <code>enrolment action</code> and thanks to the logic in the script, it holds the device at that action until the script is complete (ie, the device is on the correct network) before moving on to downloading and installing other software.</p>
+<p>As I always say, when it comes to scripting your imagination is the limit. The admin in question needed to run a script in their environment that checked some WiFi &amp; networking conditions as the first action but maybe you have a requirement to run a script half way through your onboarding flow, or after a certain software title has installed.</p>
+<p>My point here is, it doesn&rsquo;t matter what the script does, we now have a way run a script whenever we need, in a given order, at a specific time.</p>
+<p>From a configuration point of view, these are the steps to take to create a similar workflow</p>
+<p><strong>Step 1: Creating A Package Containing a Script</strong> <br>
+Lets assume that you have a script already in hand, we will need to package it up. The first consideration to make is where to locate the script in the first place. Realistically this could be anywhere you want. It could be the system <code>tmp</code> folder or the <code>/Users/Shared</code>, however, as you&rsquo;ll see later, you might want to be a little bit more targeted and thoughtful in this placement.</p>
+<p>As such, my suggestion is that we store the script in <code>/Library/Application Support/JamfSetupManager</code></p>
+<p>To create a package use a tool like <a href="https://www.jamf.com/products/jamf-composer/" target="_blank">Jamf Composer</a>
+ (which as a Jamf School Customer you should have access to through Jamf Account) or you can run script to tackle the packaging.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+I&rsquo;ve added an example and <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School/blob/main/EnrollmentPkgPackager/EnrollmentPkgPackager.sh" target="_blank">simple script on GitHub</a>
+ for packaging the scripts but I must say that if you want to learn more you should check out Armin Briegels (<a href="https://scriptingosx.com" target="_blank">scriptingosx</a>
+)<a href="https://books.apple.com/gb/book/packaging-for-apple-administrators/id1173928620" target="_blank">Packaging For Apple Administrators</a>
+ book. It could do with a bit of an update but the fundamentals are still there and I learnt so much reading this book.
+</span>
+</div>
+
+<p>Regardless of how you package your script, once you have it, you can move on to step 2</p>
+<p><strong>Step 2: Upload Package to Jamf School</strong> <br>
+Log into Jamf School and navigate to</p>
+<ul>
+<li><code>Apps</code> -&gt; <code>Inventory</code> and click <code>+ Add App</code></li>
+<li>Choose <code>Add In-House macOS Package</code></li>
+<li>Navigate to your <code>&lt;MYSCRIPT&gt;.pkg</code> on your machine and drag to the Jamf School window</li>
+<li>Once uploaded click <code>save</code></li>
+</ul>
+<p><strong>Step 3: Add Enrolment Action To Your Setup Manager Configuration Profile</strong> <br>
+Again Im going to assume that you have a Setup Manager configuration already. If not you can simply add the <code>enrolment action</code> as you build out your Setup Manager configuration profile.</p>
+<p>Since you cannot edit an existing &lsquo;custom profile&rsquo; in the Jamf School console you will need to edit your original profile or download from Jamf School. In both cases you&rsquo;ll also need a tool for editing, this could be something text based like <a href="https://www.barebones.com/products/bbedit/" target="_blank">BBEdit</a>
+ or <a href="https://coderunnerapp.com" target="_blank">Coderunner</a>
+ or something most specific to creating preferences such as <a href="https://www.fatcatsoftware.com/plisteditpro/" target="_blank">PlistEdit Pro</a>
+.</p>
+<p>You will know in your workflow where you need to run this script but for my example I want to run as script as the first action. Therefore in my configuration profile I will add the following key/values.</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>										<span style="color:#f92672">&lt;key&gt;</span>icon<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;string&gt;</span>symbol:wifi<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;key&gt;</span>label<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;string&gt;</span>Checking Wifi Network<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;key&gt;</span>shell<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;string&gt;</span>/Library/Application Support/JamfSetupManager/WiFiSwitcher.sh<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span></code></pre></div>
+
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+<path fill="currentColor"  d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
+
+
+</span>
+<span class="txt"
+
+>
+Its important that you list the location of your script in the <code>shell</code> string if you did not follow my suggested location
+</span>
+</div>
+
+<p>Once you&rsquo;ve added the <code>enrolment action</code> to invoke your script, save the configuration profile.</p>
+<p><strong>Step 4: Upload The Updated Configuration Profile to Jamf School</strong> <br>
+Again, assuming that you already have a Jamf Setup Manager configuration profile in Jamf School and you are updating your configuration (if not, and this is your first upload of a Setup Manager configuration, use the Jamf Setup Manager <a href="https://github.com/jamf/Setup-Manager/blob/main/Docs/JamfSchool-Setup.md" target="_blank">Quick Start Guide</a>
+).</p>
+<ul>
+<li>Navigate to your Setup Manager Configuration in the <code>Profiles</code> -&gt; <code>Overview</code> menu</li>
+<li>Click in the <code>name</code> of the profile (or the <code>pencil icon</code>)</li>
+<li>Click <code>replace profile</code></li>
+<li>Drag or choose your updated profile and click <code>upload</code></li>
+<li>Once uploaded click <code>save</code></li>
+</ul>
+<p>Replacing a custom profile like this does not require you to <br>
+A) Edit the payload UUID <br>
+B) Rescope the profile in any places it was already scoped</p>
+<p><strong>Step 5: Edit Automated Device Enrolment Profile</strong> <br>
+Once again, assuming you already have a Setup Manager workflow in place you will need to add your newly uploaded <code>&lt;MYSCRIPT&gt;.pkg</code> to the ADE profile ((if not,, and this is your first upload of a Setup Manager configuration, use the Jamf Setup Manager <a href="https://github.com/jamf/Setup-Manager/blob/main/Docs/JamfSchool-Setup.md" target="_blank">Quick Start Guide</a>
+).</p>
+<ul>
+<li>Navigate to your ADE profile used for your Jamf Setup Manager workflow in the <code>Profiles</code> -&gt; <code>Automated Devices Enrolment Profiles</code> menu</li>
+<li>Click <code>Profiles and packages</code></li>
+<li>Under <code>In-house macOS packages</code> click <code>+ Add</code></li>
+<li>In the drop down menu search / find your <code>&lt;MYSCRIPT&gt;.pkg</code></li>
+<li>Click <code>save</code></li>
+</ul>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+You will not need to add / or replace the Setup Manager configuration Profile if you updated it as mentioned in the step above. However if you created a new Profile (for testing purposes for example) be sure you select the new Profile here as well as paying attention to the info banner in console regarding scoping.
+</span>
+</div>
+
+<p>With that all in place you are ready to test your flow and call a script whenever you required. Since Jamf Setup Manager is what calls the script, unless handled and redirected in the script, any output the script produces (such as an <code>echo</code>) will be found in the Setup Manager log.</p>
+<hr>
+<div style="text-align: center;">
+    <img src="runScript.png" alt="App Inventory in Jamf School Console" style="max-width: 100%; height: auto;">
+</div>
+<ol>
+<li>Add Setup Manager pkg &amp; Configuration Profile and packaged script to ADE profile in Jamf School</li>
+<li>Setup Manager and the script pkg is installed during enrolment</li>
+<li>Setup Manager <code>enrolment action</code> uses <code>shell</code> and and points to the script location and runs the script</li>
+<li>Setup Manager continues with all other <code>enrolment actions</code> and closes</li>
+<li>Device is ready for user to log in and start to use the device</li>
+</ol>
+<hr>
+
+<h3 id="forget-colouring-lets-take-a-big-thick-marker-to-the-page">
+  Forget Colouring, Lets Take A Big Thick Marker To The Page
+  
+</h3>
+<p>So far thats one of the items ticked off, programatically running a script. It still left the need to update the devices inventory or <code>refresh device</code> as we know it in Jamf School.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+So here is the warning before we go any further, the big thick marker scribbling over the page as it were. What Im about to say next will polarise people. It&rsquo;ll be down to you if the benefits outweigh the concerns. Don&rsquo;t say you weren&rsquo;t warned&hellip;
+</span>
+</div>
+
+<p>Remember these are the ways we can perform a <code>refresh device</code></p>
+<ul>
+<li>Its updated when the device checks in (which is once every 4 hours, at time of writing)</li>
+<li>An admin can manually <code>refresh</code> the device through the console</li>
+<li>Users can initiate a <code>refresh</code> of their device through the Student or Teacher app</li>
+<li>An API endpoint is available to <code>refresh</code> the device and update the inventory data</li>
+</ul>
+<p>The first three clearly aren&rsquo;t designed to be automated at all but the whole idea of an API endpoint is just that, automation and triggering that action from an external source.</p>
+<p>How would you automate and hit an API endpoint? A script would be most peoples first call&hellip;.and haven&rsquo;t we just figured out that we can run a script at a given time with Setup Manager? Why, yes we have.</p>
+<p>So we can write a script that interacts with the Jamf School API, which we can then run using an <code>enrolment action</code> as the last step of the flow. Now we also have a way of performing a <code>refresh device</code> at a given time too. Problem solved!</p>
+<p>If you&rsquo;re new to the Jamf School API heres an example of a simple script to perform a <code>refresh device</code> and its also able over on my <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School" target="_blank">Github</a>
+</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#Find UDID of device</span>
+</span></span><span style="display:flex;"><span>udid<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>system_profiler SPHardwareDataType | awk <span style="color:#e6db74">&#39;/Hardware UUID/ {print $3}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#API details for SchoolOverview </span>
+</span></span><span style="display:flex;"><span>schoolInstance<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;INSTANCENAME&gt;&#34;</span> <span style="color:#75715e">##Edit Here</span>
+</span></span><span style="display:flex;"><span>apiNetwork<span style="color:#f92672">=</span><span style="color:#ae81ff">12335</span> <span style="color:#75715e">#Edit Here</span>
+</span></span><span style="display:flex;"><span>apiKey<span style="color:#f92672">=</span>qwerty0987 <span style="color:#75715e">#Edit Here</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>base64Key<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>echo -n <span style="color:#e6db74">&#34;</span>$apiNetwork<span style="color:#e6db74">:</span>$apiKey<span style="color:#e6db74">&#34;</span> | base64 <span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Optional addtional param available, directly after refresh</span>
+</span></span><span style="display:flex;"><span>clearErrors<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;?clearErrors=true&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Make the call</span>
+</span></span><span style="display:flex;"><span>curl -X POST https://<span style="color:#e6db74">&#34;</span>$schoolInstance<span style="color:#e6db74">&#34;</span>.jamfcloud.com/api/devices/<span style="color:#e6db74">&#34;</span>$udid<span style="color:#e6db74">&#34;</span>/refresh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-H <span style="color:#e6db74">&#34;Authorization: Basic </span>$base64Key<span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span></span></span></code></pre></div>
+
+
+<p>Okay, this is where I can imagine some people screaming at their screens reading that Im suggesting we run API calls from our end users devices! Mainly due to the script most likely (and most certainly in my case) having API credentials in plain text in the script.</p>
+<p>Yes, I hear you but&hellip;.theres a few things I&rsquo;ll point out</p>
+<p>Firstly, we&rsquo;re talking students and teachers onboarding devices. Our students are kids, how many of them are really trying to mine data from their school devices?! (I&rsquo;m sure there are some, lets be real) We&rsquo;re talking education environments, not a highly regulated industry like FinTech.</p>
+<p>Secondly, these scripts are ran during setup assistant. By an app thats designed to take over the whole screen and stop a user from interacting with anything other than the Setup Manager screen. Thats a lot of work for your average &ldquo;not bothered&rdquo; student to have to figure out how to get around, should they even realise theres some scripts nestled away on the file system performing API calls.</p>
+<p>Thirdly, as you&rsquo;ll see in the next section. Im not suggesting that we don&rsquo;t mitigate some risk as part of this process.</p>
+<p>Ultimately though, its your choice. In many cases I believe that the ability to perform these extra actions (particularly those that we&rsquo;ll cover in part 2) during setup out weigh the risk or problem of an end user device performing API calls. However I also completely understand in other cases Admins simply wouldn&rsquo;t be able to consider this due to policy set in their environments.</p>
+
+<h3 id="time-to-shred-the-page-clean-up-and-reduce-risk">
+  Time To Shred The Page, Clean up and Reduce Risk
+  
+</h3>
+<p>As I suggested above there is still actually one last step that we should perform in order to be &ldquo;good Admins&rdquo;. Its all very well and good me suggesting the scripts are ran during Setup Manager, where a user can&rsquo;t simply get at the file system but <strong>keeping</strong> the scripts on the device <strong>after</strong> Setup Manager and once the user has easy access to the file system, thats craziness!</p>
+<p><strong>Central Script Folder</strong> <br>
+So that I don&rsquo;t make assumptions, before we talk about clean up. Lets just go over the configuration you&rsquo;d need to go through in order to run multiple scripts during Setup Manager. To sick with my example I want to run my <code>Wifi Switcher</code> script as my first <code>enrolment action</code> and then update the device inventory data by running a <code>refresh device</code> script as the last <code>enrolment action</code>.</p>
+<p>What we <strong><em>wouldn&rsquo;t do</em></strong> is create a package per script (imagine if you had 5 or 6 scripts you wanted to run! You&rsquo;d also quick run out of slots in the ADE profile in Jamf School, which is limited to 5 packages). Instead there was a reason that I suggested that you created a central location to store the scripts.</p>
+<p><code>/Library/Application Support/JamfSetupManager</code></p>
+<p>You can simply add all the required scripts into this folder and then call the required script at the right time in your Setup Manager <code>enrolment action</code>. Take a look at my example Setup Manager <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School/blob/main/Example_JSM_Advanced_WorkflowPt1.mobileconfig" target="_blank">Configure Profile on GitHub</a>
+.</p>
+<p>Once you&rsquo;ve added all the required scripts to that location you&rsquo;d need to create a new package / configuration profile and follow the same steps as above.</p>
+<p><strong>Clean Up</strong> <br>
+Now we have just a single folder that contains these scripts that potentially include sensitive data that is actually in a location that a user can browse to and potentially read data from. <em>(remembering in this case Im talking API credentials for the <code>refresh device</code> call but in reality any script you run could have data you wouldn&rsquo;t want your users stumbling across)</em>.</p>
+<p>However the fact that we do have that single location also makes the clean up super easy! We just need to delete that folder once Setup Manager has finished.</p>
+<p>The good news is, since <code>version 1.3</code> <a href="https://github.com/jamf/Setup-Manager/tree/v1.3" target="_blank">Setup Manager</a>
+ has included a feature that will run one last script once the Setup Manager process has finished.</p>
+<blockquote>
+<p><code>finishedScript</code></p>
+<p>(String, optional)</p>
+<p>A full path to a script file which will be executed after Setup Manager has finished its workflow. This process runs independently of Setup Manager, so it can run installers or scripts that affect Setup Manager.</p>
+<p>The script has to fulfill these criteria to be executed:</p>
+<ul>
+<li>owner: root, group: wheel <br></li>
+<li>executable bit set <br></li>
+<li>not writable for group or other (file mode 755 or 555) <br></li>
+<li>no quarantine flag attached <br></li>
+</ul>
+<p>The output of the finished script and trigger will be logged to /private/var/log/setupManagerFinished.log.</p>
+<p>Example:</p>
+<p><code>&lt;key&gt;finishedScript&lt;/key&gt;</code> <br>
+<code>&lt;string&gt;/Library/Management/finishedScript.sh&lt;/string&gt;</code></p></blockquote>
+<p>Previous to this Armin had written a <a href="https://scriptingosx.com/2025/01/run-a-script-when-setup-manager-is-finished/" target="_blank">stand alone tool</a>
+ to perform this action and so can still be achieved if for some reason you have not or cannot move to <code>version 1.3+</code></p>
+<p>To use this action add the above <code>finishedScript</code> key to the top level configuration (see <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School/blob/main/EnrollmentPkgPackager/EnrollmentPkgPackager.sh" target="_blank">example Setup Manager Configuration Profile</a>
+) and point it towards your last script. I would suggest that you call it <code>finishedScript.sh</code> and of course it should be located in our <code>/Library/Application Support/JamfSetupManager</code> folder.</p>
+<p>The contents of the script is just a simple deletion of the <code>/Library/Application Support/JamfSetupManager</code> folder</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rm -rf /Library/Application<span style="color:#ae81ff">\ </span>Support/JamfSetupManager
+</span></span></code></pre></div>
+
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Since this script requires certain criteria in order to be executed in the <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School/blob/main/EnrollmentPkgPackager/EnrollmentPkgPackager.sh" target="_blank">example package builder</a>
+ script that is on GitHub I set the permissions prior to running the package command. This could however also be done as a <code>postinstall</code> action
+</span>
+</div>
+
+<p>Now, once Setup Manager has run all the <code>enrolment actions</code>, that can now include scripts and API calls, has finished this last script will run to remove the folder with any scripts we used. <em>(includes sensitive data in them such as API credentials.)</em></p>
+<hr>
+<div style="text-align: center;">
+    <img src="cleanUpFolder.png" alt="App Inventory in Jamf School Console" style="max-width: 100%; height: auto;">
+</div>
+<ol>
+<li>Add Setup Manager pkg &amp; Configuration Profile and packaged script to ADE profile in Jamf School</li>
+<li>Setup Manager and the script pkg is installed during enrolment</li>
+<li>Setup Manager <code>enrolment action</code> uses <code>shell</code> and points to the script location and runs the first script</li>
+<li>Setup Manager continues with the <code>enrolment actions</code></li>
+<li>Setup Manager uses another <code>shell</code> action, again pointing to the script location but is targeting a second script, with an API call to refresh the device</li>
+<li>Once Setup Manager has finished an additional and final script is trigger which deletes the central script location so that they are no longer on the device</li>
+<li>The user lands on the login window and device is ready to use</li>
+</ol>
+<hr>
+
+<h3 id="to-wrap-up-part-1">
+  To Wrap Up Part 1
+  
+</h3>
+<p>Again I must stress, running API calls from an end users device might not be for everyone. You must make your own mind up if this is something you can or should run in your environment.</p>
+<p>We do however reduce the risks of end users being able to access the scripts that contain API credentials and by the time a user could snoop around to look for them, they are long gone.</p>
+<p>Also consider the benefits these additional flows can bring and add this to any justification or decisions you make.</p>
+<p>In part 2, we&rsquo;ll look further into this API concept and what other advantages it brings, which includes the IT Driven, Single Touch workflow that will allow IT Admins to provision devices for their users whilst still harnessing the benefit and power of Jamf Setup Manager.</p>
+
+
+
+
+
+
+
+
+
+
+
+<nav class="pagenav">
+  
+  <div></div>
+  
+  
+    <a class="next" href="/posts/automating-token-generation-for-apple-school-managers-new-api/">
+      <span class="direction">Next »</span>
+      <br>
+      <span> Automating Token Generation for Apple School Managers New API </span>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+      </main>
+      <footer>
+  <div class="copyright">
+     © 2025  Anthony Darlow 
+  </div>
+  
+  <div class="attribution">
+    Built with <a href="https://gohugo.io" target="_blank">Hugo</a> & <a href="https://github.com/mnjm/kayal" target="_blank">Kayal</a>
+  </div>
+  
+  
+  <div>Last update Jul 26, 2025</div>
+  
+</footer>
+
+    </div>
+    
+
+
+  
+
+
+
+  
+
+
+
+  
+    
+        <script src="/js/theme.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/codecopy.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/search.js"></script>
+      
+    
+  
+
+
+  </body>
+</html>

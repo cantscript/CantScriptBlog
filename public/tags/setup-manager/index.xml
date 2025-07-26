@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>API on CantScript</title>
-    <link>http://localhost:1313/tags/api/</link>
-    <description>Recent content in API on CantScript</description>
+    <title>Setup Manager on CantScript</title>
+    <link>http://localhost:1313/tags/setup-manager/</link>
+    <description>Recent content in Setup Manager on CantScript</description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 26 Jul 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/api/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/setup-manager/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Advanced Setup Manager Flows in Jamf School, Part 1</title>
       <link>http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school/</link>
       <pubDate>Sat, 26 Jul 2025 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school/</guid>
       <description>Jamf Setup Manager powered up macOS deployment workflows for Jamf School but what happens when you power up the power up? In this blog we look at some advanced Setup Manager workflows aimed specifically at Jamf School</description>
-    </item>
-    <item>
-      <title>Automating Token Generation for Apple School Managers New API</title>
-      <link>http://localhost:1313/posts/automating-token-generation-for-apple-school-managers-new-api/</link>
-      <pubDate>Fri, 13 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/automating-token-generation-for-apple-school-managers-new-api/</guid>
-      <description>I was looking at the new documentation when an article from Bart Reardon landed on my desk. He&rsquo;d done the work already, so I went and automated the hell out of it</description>
     </item>
   </channel>
 </rss>
