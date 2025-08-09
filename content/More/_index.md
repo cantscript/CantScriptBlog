@@ -24,6 +24,10 @@ Here you'll find things that I've written, presented or worked on outside of thi
 {{< icon "youtube" >}} [Deploying Mac in HiEd: The Story of University of Leicester | JNUC 2023](https://www.youtube.com/watch?v=YEp5ji-ARCU) <br>
 {{< icon "youtube" >}} [Keeping Students Safe and Secure - Beyond Device-Level Security | JNUC 2022](https://youtu.be/b7b0zgp8qck?si=iy7H-Jym3i3Z0T7n)
 
+## Jamf Nation Live
+
+{{< icon "youtube" >}} [Jamf Blueprints Zero-to-Hero | JNL 2025](https://www.youtube.com/watch?v=OkiedeKxuzg)
+
 ## BETT
 
 {{< icon "youtube" >}} [Finding A Purpose To Your Technology Deployment With Jamf Solutions | BETT 2025](https://youtu.be/mHD1iVOEcEg?si=-espgp3r8lMj-avb) <br>

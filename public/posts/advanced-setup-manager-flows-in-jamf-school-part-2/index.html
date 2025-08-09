@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="content-language" content="en-us" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  
+  
+  <title>Advanced Setup Manager Flows in Jamf School, Part 2 &middot; CantScript</title>
+  <meta name="title" content="Advanced Setup Manager Flows in Jamf School, Part 2 &middot; CantScript" />
+  
+
+  
+  
+  <meta name="description" content="In the first part of this blog we looked to power up the feature set of Jamf Setup Manager with Jamf School. Using this as a foundation, in the second part we&#39;ll create a Single Touch IT Driven workflow perfect for any IT dept providing a white glove service for their end users" />
+  
+  <meta name="keywords" content="Workflows, macOS, Scripting, Setup Manager, API, " />
+  <link rel="canonical" href="http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school-part-2/" />
+
+  
+
+  
+    
+        <link rel="stylesheet" href="/css/theme.css">
+    
+  
+    
+        <link rel="stylesheet" href="/css/main.css">
+    
+  
+    
+  
+
+
+
+  
+  
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="CantScript" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+  
+
+  <meta property="og:url" content="http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school-part-2/">
+  <meta property="og:site_name" content="CantScript">
+  <meta property="og:title" content="Advanced Setup Manager Flows in Jamf School, Part 2">
+  <meta property="og:description" content="In the first part of this blog we looked to power up the feature set of Jamf Setup Manager with Jamf School. Using this as a foundation, in the second part we’ll create a Single Touch IT Driven workflow perfect for any IT dept providing a white glove service for their end users">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-08-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-08-09T00:00:00+00:00">
+    <meta property="article:tag" content="Workflows">
+    <meta property="article:tag" content="MacOS">
+    <meta property="article:tag" content="Scripting">
+    <meta property="article:tag" content="Setup Manager">
+    <meta property="article:tag" content="API">
+
+  
+    <meta property="og:image" content="http://localhost:1313/JSMAdvancedPT2.png" />
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Advanced Setup Manager Flows in Jamf School, Part 2">
+  <meta name="twitter:description" content="In the first part of this blog we looked to power up the feature set of Jamf Setup Manager with Jamf School. Using this as a foundation, in the second part we’ll create a Single Touch IT Driven workflow perfect for any IT dept providing a white glove service for their end users">
+
+  
+    <meta name="twitter:image" content="http://localhost:1313/JSMAdvancedPT2.png" />
+  
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script
+      defer
+      type="text/javascript"
+      src="/lib/fuse/fuse.min.1f56d60a7738743270762a2aa4e0a453be99c4476f06f3b2f51f4377d12a7ed973420f76a308d7e4855d88ec34d25940c9015464934faf30e7599fe566d7f6e4.js"
+      integrity="sha512-H1bWCnc4dDJwdioqpOCkU76ZxEdvBvOy9R9Dd9EqftlzQg92owjX5IVdiOw00llAyQFUZJNPrzDnWZ/lZtf25A=="
+    ></script>
+  
+
+
+
+  
+  
+
+
+  
+  
+  
+  
+  
+
+  
+  
+  
+    <link rel="preload" href="http://localhost:1313/fonts/Ubuntu-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+
+  
+
+  
+
+  
+  <script>
+    const siteTheme = "dark";
+    let savedTheme = localStorage.getItem('theme') || siteTheme;
+    if (savedTheme == 'auto') {
+      if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
+        savedTheme = 'dark';
+      }
+    }
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  </script>
+  
+  
+
+<script src="https://cdn.counter.dev/script.js" data-id="4f40f3ac-7039-4087-b21a-96d3879a1fdc" data-utcoffset="1"></script>
+  
+</head>
+
+  <body>
+    <div class="content">
+      <header>
+    
+    <a class="title" href="/">
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+
+  
+    <img loading="" 
+
+    
+      
+        
+        
+        
+          
+          
+          
+            src="/img/CantScript_LogoOnlyv3_hu_8dd51e941f19ba6f.png"
+          
+        
+      
+    
+      alt="Site Logo" />
+  
+
+
+
+
+    </a>
+    
+    <div class="header-cntr">
+    <a class="title" href="/">
+    <span>CantScript</span>
+    </a>
+  <div class="menu">
+  <nav id="main-menu" class="mm-normal">
+    <ul>
+    <li> <button id="mob-x-icon" class="menu-btn" arial-label="x-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+ </button> </li>
+    
+      <li><a href="/posts/" aria-label="posts">
+      Posts</li></a>
+    
+      <li><a href="/about/" aria-label="about">
+      About</li></a>
+    
+      <li><a href="/more/" aria-label="more">
+      More</li></a>
+    
+      <li><a href="https://github.com/cantscript" aria-label="github">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://www.linkedin.com/in/anthony-darlow-a795b294/" aria-label="linkedin">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://macadmins.slack.com/team/UA73QAKJL" aria-label="slack">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+    </ul>
+  </nav>
+    <div class="side-menu">
+    
+<button id="search-open" class="menu-btn" aria-label="Search button">
+  
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+</button>
+
+<div id="search-container" data-url="http://localhost:1313/">
+  <div class="search">
+    <div class="panel">
+      <form>
+        
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+        <input type="search" id="search-query" placeholder="Search" tabindex=0 autocomplete="off"/>
+        <button id="search-close" title="Cancel (ESC)">
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+
+        </button>
+      </form>
+    </div>
+    <ul id="search-results">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+    <div id="search-overlay"></div>
+  </div>
+</div>
+
+    
+    <button id="theme-switcher" class="menu-btn" aria-label="Theme switcher">
+      <div id="moon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+
+
+      </div>
+      <div id="sun">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+
+
+      </div>
+    </button>
+    
+    </div>
+    <button id="mob-hb-icon" class="menu-btn" aria-label="Hamburger icon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+
+
+    </button>
+  </div>
+  <script>
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('mob-hb-icon');
+    const closeBtn = document.getElementById('mob-x-icon');
+    const mainMenu = document.getElementById('main-menu');
+    const body = document.body;
+
+    openBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-normal', 'mm-mobile-open');
+        closeBtn.style.display = 'block';
+        body.style.overflow = 'hidden';
+    });
+    closeBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-mobile-open', 'mm-normal');
+        closeBtn.style.display = 'none';
+        body.style.overflow = '';
+    });
+    })
+  })();
+  </script>
+  
+  <script>
+  (function() {
+    var mainmenu = document.getElementById('main-menu');
+    if (!mainmenu) return;
+
+    var path = window.location.pathname;
+    var links = mainmenu.querySelectorAll('a');
+
+    links.forEach(function(link) {
+      if (link.getAttribute('href') === path) {
+        link.classList.add('active');
+      }
+    });
+  })();
+  </script>
+  
+</div>
+</header>
+
+      <main>
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+    <img loading="eager" class="cover-img"
+
+    
+      
+        src="/posts/advanced-setup-manager-flows-in-jamf-school-part-2/JSMAdvancedPT2.png"
+      
+    
+      alt="Cover Image" />
+  
+
+
+
+
+
+
+
+
+
+<ul class="breadcrumbs">
+  <li><a href="http://localhost:1313/">
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+
+
+</a></li>
+  
+    
+    
+      <li><a href="http://localhost:1313/posts/">Posts</a></li>
+    
+    
+  
+    
+  
+</ul>
+
+
+
+<h1 class="pg-title">Advanced Setup Manager Flows in Jamf School, Part 2</h1>
+
+
+<div class="meta">
+  
+
+
+
+<p>
+
+
+  
+  
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2a1,1,0,0,1,1,1Z"/></svg>
+
+
+</span>
+  Posted on <time datetime="2025-08-09T00:00:00&#43;00:00">Aug 9, 2025</time>
+  
+  
+  
+
+
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM3.00683 12C3.00683 16.9668 7.03321 20.9932 12 20.9932C16.9668 20.9932 20.9932 16.9668 20.9932 12C20.9932 7.03321 16.9668 3.00683 12 3.00683C7.03321 3.00683 3.00683 7.03321 3.00683 12Z" fill="currentColor"/>
+<path d="M12 5C11.4477 5 11 5.44771 11 6V12.4667C11 12.4667 11 12.7274 11.1267 12.9235C11.2115 13.0898 11.3437 13.2343 11.5174 13.3346L16.1372 16.0019C16.6155 16.278 17.2271 16.1141 17.5032 15.6358C17.7793 15.1575 17.6155 14.5459 17.1372 14.2698L13 11.8812V6C13 5.44772 12.5523 5 12 5Z" fill="currentColor"/>
+</svg>
+
+
+</span>
+  
+    25 mins
+  
+
+
+</p>
+
+  
+
+
+<p>
+  <span class="meta-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M48 32H197.5C214.5 32 230.7 38.74 242.7 50.75L418.7 226.7C443.7 251.7 443.7 292.3 418.7 317.3L285.3 450.7C260.3 475.7 219.7 475.7 194.7 450.7L18.75 274.7C6.743 262.7 0 246.5 0 229.5V80C0 53.49 21.49 32 48 32L48 32zM112 176C129.7 176 144 161.7 144 144C144 126.3 129.7 112 112 112C94.33 112 80 126.3 80 144C80 161.7 94.33 176 112 176z"/></svg>
+
+
+ </span>
+  
+  <a class="tag" href="/tags/workflows/">Workflows</a>
+  
+  <a class="tag" href="/tags/macos/">MacOS</a>
+  
+  <a class="tag" href="/tags/scripting/">Scripting</a>
+  
+  <a class="tag" href="/tags/setup-manager/">Setup Manager</a>
+  
+  <a class="tag" href="/tags/api/">API</a>
+  
+</p>
+
+
+
+</div>
+
+
+
+
+  <div class="toc">
+    <details >
+      <summary accesskey="c" title="(Alt+C)">
+        Table of Contents
+      </summary>
+      <div class="toc-innr">
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#considering-jamf-school-api-endpoints">Considering Jamf School API Endpoints</a></li>
+        <li><a href="#what-is-a-single-touch-it-driven-workflow">What Is A Single Touch IT Driven workflow?</a></li>
+        <li><a href="#submitting-user-data-via-setup-manager">Submitting User Data Via Setup Manager</a></li>
+        <li><a href="#parsing-user-input-for-api-call">Parsing User Input For API Call</a></li>
+        <li><a href="#deliver-additional-jamf-connect-profile-after-user-assignment">Deliver Additional Jamf Connect Profile After User Assignment</a></li>
+        <li><a href="#to-wrap-up-part-2">To Wrap Up Part 2</a></li>
+        <li><a href="#final-thoughts">Final Thoughts</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+    </details>
+  </div>
+  
+
+
+
+<p>In the first part of this blog, we looked at how we could add the functionally that <a href="https://github.com/jamf/Setup-Manager" target="_blank">Jamf Setup Manager</a>
+ provides by using scripts delivered with an <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Automated_Device_Enrollment.html" target="_blank">Automated Device Enrollment package</a>
+ and how to access the Jamf School API within these scripts.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+If you&rsquo;ve found yourself here without first reading <a href="https://cantscript.com/posts/advanced-setup-manager-flows-in-jamf-school/" target="_blank">part 1</a>
+, I strongly recommend going read this before continuing
+</span>
+</div>
+
+<p>By the end of the last blog I&rsquo;d covered the ins and outs of using the Jamf School API within scripts, things you will want to consider from a security point of view and what we can do to reduce some risk. However, the only endpoint that we&rsquo;d considered was the <code>refresh device</code> endpoint, as that was a challenge that I had been trying to overcome for a specific workflow. Of course this isn&rsquo;t the only endpoint that might be useful.</p>
+
+<h3 id="considering-jamf-school-api-endpoints">
+  Considering Jamf School API Endpoints
+  
+</h3>
+<p>With the realisation that I could call an API Endpoint via a script as part of a Setup Manager workflow, I started to wonder what other endpoints I could access. Of course the answer to this is <em>&ldquo;well <strong>anything</strong> the API provides&rdquo;</em> but that in of itself isn&rsquo;t that useful even if true. So I reframed the question to <em>&ldquo;which endpoints are available that could provide quick and easy value to the onboarding process&rdquo;</em>, after all Setup Manager is all about the onboarding process.</p>
+<p>Theres likely to be others but the first few that came straight to my mine were</p>
+<ul>
+<li>Notes (adding / removing entries to the devices&rsquo; inventory record under the <code>notes</code> attribute)</li>
+<li>Asset Tag (adding / removing entries to the devices&rsquo; inventory record under the <code>assetTag</code> attribute)</li>
+<li>Device Static Group (adding / removing the device to / from a pre-existing static group)</li>
+<li>Owner Assignment (adding, amending or removing the devices&rsquo; user assignment)</li>
+</ul>
+<p>Although the ability to add / remove a device to / from a static group is useful, in my environment I tend to use <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Device_Groups.html" target="_blank">smart groups</a>
+ almost exclusively, so that didn&rsquo;t appeal to me as much as others.</p>
+<p>I found the notes and asset tag endpoints very interesting since in Jamf School we can use these attributes as criteria in smart groups (there will be more on this a little later).</p>
+<p>Without a shadow of a doubt the thing that piqued my interest the most was the owner assignment of the device because, for Jamf Pro, Setup Manager was able to provide a workflow for IT depts to configure the device on behalf of a user, assigning that user as part of the flow but while not needing them to be present.</p>
+<p>That being the key here, the user not being present, the admin still being able to take the machine through the Setup Manager workflow and not needing to actually log in to the device while ensuring that the device is assigned to that user (so that any user specific management is applied)</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+<p>This is very different from the end user enrolling their own device where we can get the correct user assignment by using an authenticated enrolment.</p>
+<p>Also an Admin not needing to login to the device to see that the onboarding workflow is successful can be super useful for FileVault, Bootstrap or MDM enabled users workflows that revolve around the first user created / logging in.</p>
+
+</span>
+</div>
+
+
+<h3 id="what-is-a-single-touch-it-driven-workflow">
+  What Is A Single Touch IT Driven workflow?
+  
+</h3>
+<p>Before we continue, we should outline what a Single Touch IT Driven workflow is and rather than reinvent the wheel, this is what the Setup Manager documentation states</p>
+<blockquote>
+<p>In a single touch workflow a tech performs or monitors the initial setup of a device to the point just before the user creates their account. While Setup Manager can run zero-touch workflows, it was built specifically with single-touch workflows in mind.</p>
+<p>A single touch workflow can be as easy the tech unpacking the Mac (erasing it with an MDM command or restoring it with Apple Configurator when necessary), connecting it to network, stepping through the initial Setup dialogs, optionally entering the asset tag or other data, monitoring Setup Manager&rsquo;s process until it is finished and then handing over or sending the Mac to the designated end user who continues the setup and creates their account in Setup Assistant.</p></blockquote>
+<p>As I&rsquo;ve now said a few times, this is really useful for admins providing a <em>&ldquo;white glove&rdquo;</em> service for their end users. What do I mean by <em>&ldquo;white glove&rdquo;</em>? well it could mean different things for different people but essentially the reason that IT teams might offer a white glove process</p>
+<ul>
+<li>Younger users who might have problems stepping through the enrolment without supervision</li>
+<li>VIPs - senior leadership or this type of individual who you want to give a special experience too</li>
+<li>Staff member&rsquo;s that don&rsquo;t feel super confident with technology</li>
+<li>Provide additional value for your IT dept / team within your institution</li>
+<li>For resellers / MSPs to offer as a service so that their customers don&rsquo;t need to worry about any kind of setup, it just lands onsite &ldquo;ready to go&rdquo;</li>
+</ul>
+<p>This flow can go one step further if you are also utilising Jamf Connect. Again stated in the Jamf Setup Manager documentation</p>
+<blockquote>
+<p>You can use a combination of Jamf [School], Setup Manager and Jamf Connect, to get a tighter deployment, user assignment and account creation process. This requires a bit more setup and configuration. This workflow allows the tech to monitor the Setup Manager workflow, enter device specific data such as an asset tag and assign and lock the device to a different user, without requiring the end user&rsquo;s login credentials.</p></blockquote>
+<p>This additional integration with Jamf Connect means that the only person that can login to this device is the person who has been assigned during Setup Manager. Which if you are shipping devices to your end users is another nice &ldquo;lock down&rdquo; should the device end up in the wrong hands.</p>
+<p>For this blog, we will be going for this full integration using Jamf School, Setup Manager and Jamf Connect. For the additional Jamf Connect integration you&rsquo;ll want to read my previous blog, <a href="https://cantscript.com/posts/macos-authenticated-enrollment-passthrough-in-jamf-school/" target="_blank">macOS Authenticated Enrolment Passthrough in Jamf School</a>
+, paying special attention to the section <em>Additional Jamf Connect Profile</em>. We&rsquo;ll need this for our workflow here but I wont be going over how to create this profile in this blog.</p>
+<div style="text-align: center;">
+    <img src="UserAssignASM.gif" alt="App Inventory in Jamf School Console" style="max-width: 100%; height: auto;">
+</div>
+
+<h3 id="submitting-user-data-via-setup-manager">
+  Submitting User Data Via Setup Manager
+  
+</h3>
+<p>There are a number of steps required to create this workflow with Jamf School covering built in features of Setup Manager, scripts, API calls and smart groups in Jamf School. The broad stoke steps are</p>
+<ul>
+<li><strong>Step 1</strong>: Configure Setup Manager to Accept Admin Input</li>
+<li><strong>Step 2</strong>: Parse this input, prepare and make an API call</li>
+<li><strong>Step 3</strong>: Deliver additional Jamf Connect Profile after user assignment</li>
+</ul>
+<p>The first thing that we need to understand is how to configure Setup Manager to accept admin input but just as importantly how this data is stored so that we can access it later in our flow.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Since there is plenty of documentation around configuring Setup Manager and I covered out to update your current Setup Manager items in part one. Here we&rsquo;ll just talk about the additional keys you will need to add to make use of this workflow.
+</span>
+</div>
+
+<p>The Setup Manager documentation explains the <code>userEntry</code> enrolment action but is very focused on Jamf Pro. As such I wont go over the full details of the <code>userEntry</code> action but instead show you the configuration that you need for Jamf School and this workflow. This being said, there are some <code>validation</code> options that might be useful for your use case which will also work in addition to what I show you, so I do recommend taking a look at the documentation.</p>
+<p>The <code>userEntry</code> key is one of 2 extra keys that we&rsquo;ll need to add to our Setup Manager configuration profile. The <code>userEntry</code> key is added as a top level key.</p>
+<p>For our usage we need to add the sub-keys <code>realName</code> and <code>email</code>. Since the term <code>realName</code> isn&rsquo;t very clear, I also provided a label and a placeholder. The <code>userEntry</code> key in my configuration profile would be as follows</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>								<span style="color:#f92672">&lt;key&gt;</span>userEntry<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>								<span style="color:#f92672">&lt;dict&gt;</span>
+</span></span><span style="display:flex;"><span>									<span style="color:#f92672">&lt;key&gt;</span>email<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>									<span style="color:#f92672">&lt;string&gt;</span>Use your School email address<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>									<span style="color:#f92672">&lt;key&gt;</span>realname<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>									<span style="color:#f92672">&lt;dict&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;key&gt;</span>label<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;string&gt;</span>Full Name<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;key&gt;</span>placeholder<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;string&gt;</span>John Smith<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>									<span style="color:#f92672">&lt;/dict&gt;</span>
+</span></span><span style="display:flex;"><span>								<span style="color:#f92672">&lt;/dict&gt;</span>
+</span></span></code></pre></div>
+
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+The <code>subkeys</code> used relate to a Jamf Pro deployment and its important that the correct key is used so that the Jamf Pro binary submits the correct attribute for the devices. For Jamf School, this isn&rsquo;t the case. We could use any one of the <code>subkeys</code> to collect the data, as you&rsquo;ll see later on, we &ldquo;manually&rdquo; search for the <code>subkeys</code> in a script. Despite this, I would recommend that we use <code>subkeys</code> that make sense for the data we are collecting as a best practise (and to make it easier for you or somebody else to understand whats going in on when you&rsquo;ve not looked at the flow for months)
+</span>
+</div>
+
+<p>The second key that we need to add is an <code>enrolment action</code> and is <code>waitForUserEntry</code>. This means that the Admin must enter the details and press the &lsquo;save&rsquo; button before any other <code>enrolment actions</code> are performed. This can be located where ever makes the most sense in your <code>enrolment actions</code>, for me, since its the the point of the IT Driven workflow, I think its important enough to be one of the first actions. The <code>waitForUserEntry</code> key in my configuration profile would be as follows <em>(its important to note that the <code>waitForUserEntry</code> key has a value of <code>string</code> the value should be empty)</em></p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>										<span style="color:#f92672">&lt;key&gt;</span>label<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;string&gt;</span>Enter User Details<span style="color:#f92672">&lt;/string&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;key&gt;</span>waitForUserEntry<span style="color:#f92672">&lt;/key&gt;</span>
+</span></span><span style="display:flex;"><span>										<span style="color:#f92672">&lt;string&gt;&lt;/string&gt;</span>
+</span></span></code></pre></div>
+
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Although technically the <code>waitForUserEntry</code> key is not required, since we&rsquo;re going to perform an API call as part of the bigger flow requiring this step to be completed before we attempt to make the API call is just logical and would be a strong recommendation from me.
+</span>
+</div>
+
+<p>There is an <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School/blob/main/Example_JSM_UserAssignment_WorkflowPt2.mobileconfig" target="_blank">example configuration profile</a>
+ over at my <a href="https://github.com/cantscript" target="_blank">GitHub</a>
+ in the repo related to this blog but be aware we&rsquo;ll need to create the scripts in the next step before we cover everything in that example profile.</p>
+<div style="text-align: center;">
+    <img src="userInput.jpeg" alt="App Inventory in Jamf School Console" style="max-width: 100%; height: auto;">
+</div>
+
+<h3 id="parsing-user-input-for-api-call">
+  Parsing User Input For API Call
+  
+</h3>
+<p>Adding these keys to the Setup Manager config profile on its own wont do much else than ask the user to enter some details and move on. Remember, since this isn&rsquo;t Jamf Pro, with the binary that can natively update device inventory data, Setup Manager doesn&rsquo;t no what else to do with the data other than just store it.</p>
+<p>The fact that Setup Manager <em>does</em> store that data locally however is a good thing for us, in fact its essential for the next part.</p>
+<p>Whenever the <code>userEntry</code> option is used Setup Manager writes this data to a <code>txt</code> file located at <code>/private/var/db/SetupManagerUserData.txt</code> or <code>/Users/Shared/SetupManagerUserData.txt</code> when using debug mode. This means we can take this stored information and using the Jamf School API assign an owner (user) to the device with a script.</p>
+<p>Theres a few things that we need to do within the script.</p>
+<ul>
+<li>Get the <code>UDID</code> of the device as this is needed to identify the device via the API</li>
+<li>Read the <code>realname</code> value from the <code>SetupManagerUserData</code> file</li>
+<li>Make an API call to Jamf School to get a list of users</li>
+<li>Filter the results to find the <code>realname</code> (aka <code>FullName</code>) in Jamf School and extract the <code>userId</code>, this is needed to assign the user to the device</li>
+<li>Make an API call to actually do the assignment now we have the device <code>UDID</code> and <code>userId</code></li>
+<li>Make an API call to <code>refresh details</code> so the inventory data in Jamf School is most update to date <em>(and will be important for the next step, but we&rsquo;ll put a pin in this for the second)</em></li>
+</ul>
+<p>In doing this we&rsquo;ll also build in some error handling so that if anything fails the script fails gracefully and gives some feedback in the Setup Manager log</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Worth noting here that although the script will fail gracefully, the Setup Manager tile will still show as completed with success.
+</span>
+</div>
+
+<p><strong>Get the <code>UDID</code> of the device</strong> <br>
+This is a pretty standard line of code and can be gathered directly from the device. It looks something like</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#Find UDID of device</span>
+</span></span><span style="display:flex;"><span>udid<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>system_profiler SPHardwareDataType | awk <span style="color:#e6db74">&#39;/Hardware UUID/ {print $3}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span></code></pre></div>
+
+
+<p><strong>Read the <code>realname</code> value from the <code>SetupManagerUserData</code> file</strong> <br>
+I&rsquo;ve built a function that first checks that the <code>SetupManagerUserData</code> is on the device in the known location for standard or debug use and if not provides some logging.</p>
+<p>If the file exists that we try and extract the value from the <code>realname</code> line.</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>getUserAssignment<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># Logic to enable script to work in both standard and debug modes</span>
+</span></span><span style="display:flex;"><span>	local prodLoc<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/private/var/db/SetupManagerUserData.txt&#34;</span>
+</span></span><span style="display:flex;"><span>	local debugLoc<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>	local file
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># Check which file exists</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> -f <span style="color:#e6db74">&#34;</span>$prodLoc<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>		file<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$prodLoc<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">elif</span> <span style="color:#f92672">[[</span> -f <span style="color:#e6db74">&#34;</span>$debugLoc<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>		file<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$debugLoc<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">#Throw error if file not found</span>
+</span></span><span style="display:flex;"><span>		echo <span style="color:#e6db74">&#34;Error: SetupManagerUserData.txt not found in expected locations.&#34;</span> &gt;&amp;<span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># Extract realname value</span>
+</span></span><span style="display:flex;"><span>	local userAssignment
+</span></span><span style="display:flex;"><span>	userAssignment<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>awk -F<span style="color:#e6db74">&#39;: &#39;</span> <span style="color:#e6db74">&#39;/^realname:/ {print $2}&#39;</span> <span style="color:#e6db74">&#34;</span>$file<span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>	echo <span style="color:#e6db74">&#34;</span>$userAssignment<span style="color:#e6db74">&#34;</span> <span style="color:#75715e">#Return realname value from file</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+You can extract other data out of the file using the same code but changing the <code>realname</code> value for something else. If you&rsquo;ve followed my guide you wont need to change this but if you used another value or want to expand on what I&rsquo;ve done you can.
+</span>
+</div>
+
+<p><strong>Make an API call to Jamf School to get a list of users</strong> <br>
+With this information in hand we can make an API to Jamf School to list the users in the system and then filter out the user that we are looking for to extract the <code>userId</code>. <em>We need this step as you cannot assign a user via the API with a <code>FullName</code> or <code>username</code>, it must be the <code>userId</code></em></p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+To make things easier here I&rsquo;ve used <code>jq</code> which comes shipped with macOS since <code>macOS15</code>. If you are running devices before <code>macOS15</code> if you wish to use the example as is you&rsquo;ll need to <a href="https://jqlang.org" target="_blank">install jq</a>
+ &lsquo;manually&rsquo;
+</span>
+</div>
+
+<p>If the user isn&rsquo;t found then we provide and error and log</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>getUserId<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	local inputUser<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span>  <span style="color:#75715e"># Accepts the username as an argument</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># Fetch the users from the API</span>
+</span></span><span style="display:flex;"><span>	local getUsers<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>curl -s -X GET https://<span style="color:#e6db74">&#34;</span>$schoolInstance<span style="color:#e6db74">&#34;</span>.jamfcloud.com/api/users -H <span style="color:#e6db74">&#34;Authorization: Basic </span>$base64Key<span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># Extract user ID using jq</span>
+</span></span><span style="display:flex;"><span>	local userId<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>echo <span style="color:#e6db74">&#34;</span>$getUsers<span style="color:#e6db74">&#34;</span> | jq --arg name <span style="color:#e6db74">&#34;</span>$inputUser<span style="color:#e6db74">&#34;</span> -r <span style="color:#e6db74">&#39;.users[] | select(.name == $name) | .id&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">#Check to see if userID is found, if not assume user was not found in Jamf School</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">#and throw error</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> -z <span style="color:#e6db74">&#34;</span>$userId<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>		echo <span style="color:#e6db74">&#34;Error: </span>$inputUser<span style="color:#e6db74"> not found in Jamf School.&#34;</span> &gt;&amp;<span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	echo <span style="color:#e6db74">&#34;</span>$userId<span style="color:#e6db74">&#34;</span>  <span style="color:#75715e"># Return userId from API Call</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+
+
+<p>Its at this point that I should point out some things that I&rsquo;ve glossed over until now. Generally speaking its at this step that you&rsquo;ll have the most chance of things going wrong, failing and providing an error. Thats not to say we can&rsquo;t do thing prevent this from happening <em>(or at least way less regularly)</em> more over I&rsquo;ve just been lazy when providing you with an example script! Here are some things to consider&hellip;.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+This whole workflow requires that the users you are assigning to the devices are already synchronised into Jamf School. Now theres a whole heap of things that I could spend multiple other blogs writing about when it comes to importing users but if you&rsquo;re users are already in Jamf School, cool! If not and you need a helping hand to get started I suggest watching my JNUC session from 2024 called <a href="https://youtu.be/ET0AxMAB3wY?si=VlyJMh_-YeZ_Tnhw&amp;t=1313" target="_blank">Scaling Success - Mastering Large-Scale Jamf School Configuration</a>
+ <em>(from around 21:53 until the end)</em>
+</span>
+</div>
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+<p>The <code>userEntry</code> form is susceptible to human error, aka typos! (I should know, I don&rsquo;t think I&rsquo;ve released a blog post yet without at least one in it). If I were to enter a persons incorrectly, the whole thing fails!</p>
+<p>We also ask for the users <code>realname</code> <em>(or <code>FullName</code>)</em> and <code>email</code> in the form but in the script I don&rsquo;t actually do anything at all with the email address in terms of validation. I only search for the matching <code>realname</code>.</p>
+<p>To reduce the errors brought on by typos you could (and most likely should) also use the <code>email</code> address you captured and filter for the user on that as well. You&rsquo;d then likely match if <code>realName</code> <em><em>OR</em></em> <code>email</code> address is matched <em>(whats the likelihood you&rsquo;ll make a typo in both entries?)</em></p>
+<p>To harden this you could (and again probs should) use the <code>endUsername</code> key in the config profile and enter a users <code>username</code> as well and then add this to your matching logic (or completely replace <code>realname</code> with <code>endUsername</code> incase of users with the same full name)</p>
+<p>If you add this in the same function then you will only still need to make the API call once even though you might quiz the data multiple times.</p>
+
+</span>
+</div>
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+Finally, to really mitigate errors as much as possible, within the Setup Manager config profile the <code>userEntry</code> key does allow for some <a href="https://github.com/jamf/Setup-Manager/blob/main/ConfigurationProfile.md#validation" target="_blank">regex validation</a>
+ so you can ensure that the email domain is valid or that a username must be firstIntial.lastName etc etc
+</span>
+</div>
+
+<p><strong>Make an API call to do the Assignment</strong>
+With all of the information in hand we can now to the user assignment via the API</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>assignAUser<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	curl -X PUT https://<span style="color:#e6db74">&#34;</span>$schoolInstance<span style="color:#e6db74">&#34;</span>.jamfcloud.com/api/devices/<span style="color:#e6db74">&#34;</span>$udid<span style="color:#e6db74">&#34;</span>/owner <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-H <span style="color:#e6db74">&#34;Authorization: Basic </span>$base64Key<span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-H <span style="color:#e6db74">&#34;content-type: application/json&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-d <span style="color:#e6db74">&#34;{ \&#34;user\&#34;: \&#34;</span>$assignedUserId<span style="color:#e6db74">\&#34; }&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+
+
+<p><strong>Make an API call to <code>refresh details</code> of the Device Inventory</strong>
+You&rsquo;ll notice this is a very similar call to the above but is something that must be done after the assignment</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>updateDeviceDetails<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	curl -X POST https://<span style="color:#e6db74">&#34;</span>$schoolInstance<span style="color:#e6db74">&#34;</span>.jamfcloud.com/api/devices/<span style="color:#e6db74">&#34;</span>$udid<span style="color:#e6db74">&#34;</span>/refresh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-H <span style="color:#e6db74">&#34;Authorization: Basic </span>$base64Key<span style="color:#e6db74">&#34;</span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+
+
+<p><strong>Full Script</strong>
+I&rsquo;ve highlighted the main elements of the script but to run them like this wouldn&rsquo;t give you the result you needed. I&rsquo;ve included a <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School/blob/main/EnrollmentPkgPackager/payload/Library/Application%20Support/JamfSetupManager/assignUser.sh" target="_blank">full script example on GitHub</a>
+</p>
+<p>This script should then be added to the package that you deliver to the device in your Automated Device Enrolment Package and the Setup Manager configuration Profile should point have an <code>enrolment action</code> with a <code>shell command</code> pointing to this script directly after your <code>waitForUserEntry</code> action (See the full <a href="https://github.com/cantscript/Advanced-Setup-Manager-Flows-in-Jamf-School/blob/main/Example_JSM_UserAssignment_WorkflowPt2.mobileconfig" target="_blank">example configuration profile</a>
+)</p>
+<div style="text-align: center;">
+    <img src="userAssignAction.png" alt="App Inventory in Jamf School Console" style="max-width: 100%; height: auto;">
+</div>
+
+<h3 id="deliver-additional-jamf-connect-profile-after-user-assignment">
+  Deliver Additional Jamf Connect Profile After User Assignment
+  
+</h3>
+<p>Without doing anything else an Admin could enrol the device and assign it to the end user. In this case after Setup Manager has finished you&rsquo;d likely have Setup Assistant ask the user to create a local user account. At this point the Admin could shut down the machine, box it up and ship it out to the end user. All they&rsquo;d need to do is turn it on, follow the remaining setup assistant steps and they&rsquo;d be up and running, all with the apps they need installed.</p>
+<p>However, if you are using Jamf Connect, we can make this experience even more customised, tighter and secure (since the only person that can login to this device is the intended end user, even if its somebody else from you school that receives the device).</p>
+<div style="text-align: center;">
+    <img src="jcPreFill.jpeg" alt="App Inventory in Jamf School Console" style="max-width: 100%; height: auto;">
+</div>
+<p>As I pointed out towards the start I&rsquo;m not going to go over the Additional Jamf Connect Profile, how it works or what you need <em>(see the <a href="https://cantscript.com/posts/macos-authenticated-enrollment-passthrough-in-jamf-school/" target="_blank">previous blog</a>
+ for that)</em> but instead how to deploy it within the context of this workflow.</p>
+<p>Within the script above there is one final API call that I make which sets the devices <code>assetTag</code>, this then adds the device into a smart group, which in turn deploys the additional configuration.</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>updateAssetTag<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	curl -X POST https://<span style="color:#e6db74">&#34;</span>$schoolInstance<span style="color:#e6db74">&#34;</span>.jamfcloud.com/api/devices/<span style="color:#e6db74">&#34;</span>$udid<span style="color:#e6db74">&#34;</span>/details <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-H <span style="color:#e6db74">&#34;Authorization: Basic </span>$base64Key<span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-H <span style="color:#e6db74">&#34;content-type: application/json&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>	-d <span style="color:#e6db74">&#34;{ \&#34;assetTag\&#34;: \&#34;User Details Entered\&#34; }&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>
+
+
+<p>Its important that the profile doesn&rsquo;t get delivered to the device until after the user assignment has happened since it uses Jamf School variable&rsquo;s and with no user assignment <em>(If the profile got delivered after enrolment but before the user assignment for example)</em> the profile would just use that standard variable tokens.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+I have a previous blog on the topic of <a href="https://cantscript.com/posts/using-jamf-school-variables-in-scripts/" target="_blank">Jamf School Variables</a>
+ if this is something that is new to you
+</span>
+</div>
+
+<p>As well as the extra API call within the script, we&rsquo;ll need to do some work in the Jamf School console and set up a Smart Group that looks for a certain value in the <code>assetTag</code> field of the device inventory. You&rsquo;ll notice that in the example I use the value of <code>User Details Entered</code> and this is what will build the Smart Group on. You can use whatever value you like and adjust the Smart Group accordingly.</p>
+<p>To configure the Smart Group log in to Jamf School and navigate to</p>
+<ul>
+<li><code>Devices</code> -&gt; <code>Device Groups</code> -&gt; click <code>+ Add Group</code></li>
+<li>Name the profile (I went with &ldquo;Jamf Connect Enrol User Details&rdquo;) -&gt; click <code>Smart Group</code></li>
+<li>Navigate to <code>Profiles</code>, choose your Jamf Connect Additional Profile and choose <code>Automatic</code></li>
+<li>Navigate to <code>Members</code> -&gt; <code>+ Add Filter</code> and select <code>Asset Tag</code>, <code>equals</code> and then type <code>User Details Entered</code></li>
+<li>click <code>Save</code></li>
+</ul>
+<p>With this in place once Setup Manager finishes and any additional Setup Assistant panes are completed you will see the Jamf Connect Window asking for the password (and only the password) of the assigned user and only that user can log into the device for the first time.</p>
+<p>As an admin we are in the same position as before we&rsquo;ve enrolled the device, ensured it has all the apps we need, assigned it to the user and once its at the Jamf Connect window we can turn off, box up and ship to our end user.</p>
+<hr>
+<div style="text-align: center;">
+    <img src="singleTouchFlow.png" alt="App Inventory in Jamf School Console" style="max-width: 100%; height: auto;">
+</div>
+<ol>
+<li>Jamf Setup Manager has <code>enrolment action</code> <code>userEntry</code> and <code>waitForUserEntry</code> enabled</li>
+<li>Admin enters end user details, which are written to local file. Setup Manager holds here until user entry is complete</li>
+<li>Script is called which parses data from local file, makes API calls to retrieve <code>userId</code>. Assigns user to device, writes a value to the <code>assetTag</code> attribute and triggers a <code>refresh details</code> via API</li>
+<li>Jamf Setup Manager then performs the rest of the <code>enrolment actions</code></li>
+<li>Concurrently, due to the API calls performed at step 3, Jamf School recalculates Smart Groups. Device falls into group targeting <code>assetTag</code> value of <code>User Details Entered</code> and delivers additional Jamf Connect Profile</li>
+<li>Once Setup Manager has finished an additional and final script is trigger which deletes the central script location so that they are no longer on the device</li>
+<li>The user lands on the Jamf Connect login window, displaying the assigned users name and asking them for their password. The device is ready to use</li>
+</ol>
+<hr>
+<p>###Additional Details: Additional Jamf Connect Profile After User Assignment</p>
+<p><strong>Using The Asset Tag Device Inventory Attribute</strong> <br>
+This flow requires the <code>assetTag</code> device attribute which might be a problem if you already use the <code>assetTag</code> for other purposes in your environment.</p>
+<p>If this is the case you can instead use the <code>notes</code> attribute in the same way since you can build a Smart Group using this attribute just as you can with <code>assetTag</code> and the API call to write data here is almost identical.</p>
+<p>If you are also using the notes field already, you can still use this flow but it requires a little more work <em>(and testing for robustness)</em> where by you add this additional data to the existing data. When you add to either of these attributes using the API it over writes what is already there. Therefore if you want to add the <code>User Details Entered</code> text as an addition you would need to</p>
+<ul>
+<li>Read any data already in the <code>assetTag</code> or <code>notes</code> attribute via the API (which is given by default with the GET devices endpoint)</li>
+<li>Append <code>User Details Entered</code> to whatever data is already there</li>
+<li>Make the API call, writing the new string which includes <code>current data</code>+<code>User Details Entered</code></li>
+</ul>
+<p>Prior to this you will need to amend your &ldquo;Jamf Connect Enrol User Details&rdquo; Device Smart Group so that the criteria now states <code>contains</code> and not <code>equals</code>. This would also be the case for any Device Smart Groups you have configured that makes use of the &ldquo;current data&rdquo; as a criteria.</p>
+<p>I said it already but once more&hellip;..if using this &ldquo;appending&rdquo; method, <em>test</em>, <strong>Test</strong>, <em><strong>TEST</strong></em></p>
+<p><strong>Do I need to Have Entered an Email Address at User Entry?</strong> <br>
+Remember above how I said that in my example I don&rsquo;t actually use the information collected in the <code>email</code> value from the <code>userEntry</code> <em>(while remembering I said you should for validation)</em>?</p>
+<p>If you&rsquo;ve also read the blog about the Additional Jamf Connect Profile you&rsquo;ll have seen that you <em><strong>DO</strong></em> need to provide the email address.</p>
+<p>So whats the deal!? Do you need it or not?</p>
+<p>Simply, you <em><strong>DONT</strong></em> need to collect it for this profile (although again, you should for filtering out the user and validation). The email address to populate this profile is pulled from the user record in Jamf School, so it is important that this record does have the correct IdP corresponding email.</p>
+<p>Which then leads me to&hellip;.</p>
+<p><strong>Typo Trouble</strong> <br>
+As I said before typo&rsquo;s can lead to users not being found, matched ad assigned to the device. In the workflow without the Jamf Connect pre-filled details in the mix, this might lead to a device not assigned to a user <em>(which in turn might lead to some missing apps or config)</em></p>
+<p>If there is a typo in which leads to an incorrect / no user assignment with this extra Jamf Connect piece in play, you&rsquo;ll end up at a Jamf Connect window that is asking for a password for a user called <code>%FullName%</code> and an email of <code>%Email</code>. Clearly your IdP wont have a user with these details and you&rsquo;ll be stuck. Remember, with this profile in place <em>THE ONLY</em> person that can log in for the first time is this pre-filled user.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+This then makes all my points about ensuring that there is proper user validation in the &ldquo;assign a user&rdquo; script even more important.
+</span>
+</div>
+
+<p><strong>Device Re-enrolments</strong> <br>
+Theres one thing final thing about this flow if you are using the extra Jamf Connect piece and thats around re-enrolments. Since we&rsquo;ve written to the <code>assetTag</code> attribute its worth knowing that this persist with a re-enrolment, this means the Smart Group looking for the <code>User Details Entered</code> will pick up the device as soon as its enrolled again.</p>
+<p>Only, we only want the the additional Jamf Connect profile to land on the device <em>after</em> user assignment to prevent the default variable tokens.</p>
+<p>As such my recommendation was going to be <em>(hang on there)</em> when wiping devices and enrolling them, ensure that you are also removing the <code>assetTag</code> value either via an API <em>(which you could also add a wipe device command to as well, to automate both actions)</em> or the console.</p>
+<p>However, that was <strong><em>going to be</em></strong> the advice.</p>
+<p>Turns out through my testing, I&rsquo;ve had times when I&rsquo;ve forgotten to do this and everything has still worked and I believe this is because of the <code>refresh details</code> API call that I make in the &ldquo;assign user&rdquo; script.</p>
+<p>Yes, on re-enrolment the additional Jamf Connect profile will either land on the device after enrolment with either the previous users details or the default variable tokens (depending on your environment setup) but once the new user assignment happens via the script and the <code>refresh details</code> is completed, Jamf School understands there has been a change of values in these attributes and re-issues the Additional Jamf Connect Profile with the most current variable values (the user you&rsquo;ve just assigned).</p>
+<p>Since Setup Manager will have many other <code>enrolment actions</code> <em>(providing you do this towards the start of your flow, which I highly recommend)</em> the device has plenty of time to receive the updated profile before landing on the Jamf Connect window.</p>
+<p>Which method should you take? <em>test</em>, <strong>Test</strong>, <em><strong>TEST</strong></em>! From my testing both work but you should test in your environment and figure out which is best for you.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+As I sit here writing this, I&rsquo;ve realised its also entirely possible I&rsquo;ve seen this behaviour (without needed to removed the <code>assetTag</code> value) as I&rsquo;ve used the same user on re-enrolment and as such its just &ldquo;worked like magic&rdquo;. So again, please test before deciding which route you should use.
+</span>
+</div>
+
+
+<h3 id="to-wrap-up-part-2">
+  To Wrap Up Part 2
+  
+</h3>
+<p>After reading this part you might be sitting there thinking theres a lot of extra work to get this stood up and / or theres a lot of point where this potentially could go wrong.</p>
+<p>I&rsquo;d struggle to disagree with both of these because this extra part of the puzzle described here wont be for everyone who uses Setup Manager. You&rsquo;re &ldquo;worth it&rdquo; workflows were all in <a href="https://cantscript.com/posts/advanced-setup-manager-flows-in-jamf-school/" target="_blank">Part 1</a>
+</p>
+<p>However&hellip;.</p>
+<p>If your environment requires this single touch IT driven workflow I will say with some certainly that this extra work is minimal compared to the time and effort you currently have to put in to &ldquo;white glove&rdquo; the onboarding. Remembering as well that once you&rsquo;ve got your script tuned in (80% of it is already in the example, you really only need to work on the validation part based on my recommendations) the extra work is done and you are &ldquo;banking cash&rdquo; with every device you onboard after that.</p>
+<p>If you&rsquo;re in the &ldquo;could go wrong&rdquo; camp, remember these few things. I was lazy with my script and didn&rsquo;t deal with any validation, which in a production environment I 100% would. With the validation in place, 90% of the &ldquo;could go wrong&rdquo; parts fizz away. It will be IT professionals, your IT crew, that will be running through the Single Touch IT Driven workflow, these are people you trust. Explain to them the importance of making sure things are spelt correctly. This carefulness along with validation in the script will go along way to making this a success.</p>
+<p>Finally, if things do go wrong, as long as its not on every device onboarding <em>(in which case it suggests something else and bigger is wrong anyway)</em>, its not the end of the world.</p>
+<p>Lets say that you get to the Jamf Connect screen and it says the wrong user</p>
+<p>&hellip;.as I&rsquo;d hope the admin / IT professional checks this before boxing the device up or handing it out&hellip;</p>
+<p>You wont need to nuke and pave, simply logging into the Jamf School console, assigning the device to the correct user, performing a <code>refresh device</code> and allowing the device to check in, will fix the issue.</p>
+<p>Again, the things discussed in part 2 wont be for everyone and thats completely fine, don&rsquo;t worry about it but keep it in mind as one day it might just be the solution you need.</p>
+
+<h3 id="final-thoughts">
+  Final Thoughts
+  
+</h3>
+<p>Across the last 2 blogs we&rsquo;ve discussed advanced workflows we can perform with Jamf Setup Manager and Jamf School. At times we&rsquo;ve &ldquo;coloured outside the lines&rdquo; to get the results we needed but if your environment allows you to do so, we&rsquo;ve added a a feature set that gives you and your team a power house of an already crazy good onboarding tool and flow.</p>
+<p>Regardless of if end users are onboarding their own devices, you&rsquo;re an IT dept onboarding devices for your Teachers, Students or VIPs or you&rsquo;re a reseller / MSP provide a service for your school customers, we&rsquo;ve got something in these advanced workflows for you.</p>
+<p>Now if only some of the things we&rsquo;ve discussed here specifically with how Jamf School works were baked into Jamf Setup Manager. If only I knew the guy that made it 😉</p>
+<p>We can hope, right 🤞🏼</p>
+
+
+
+
+
+
+
+
+
+
+
+<nav class="pagenav">
+  
+  <div></div>
+  
+  
+    <a class="next" href="/posts/advanced-setup-manager-flows-in-jamf-school/">
+      <span class="direction">Next »</span>
+      <br>
+      <span> Advanced Setup Manager Flows in Jamf School, Part 1 </span>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+      </main>
+      <footer>
+  <div class="copyright">
+     © 2025  Anthony Darlow 
+  </div>
+  
+  <div class="attribution">
+    Built with <a href="https://gohugo.io" target="_blank">Hugo</a> & <a href="https://github.com/mnjm/kayal" target="_blank">Kayal</a>
+  </div>
+  
+  
+  <div>Last update Aug 9, 2025</div>
+  
+</footer>
+
+    </div>
+    
+
+
+  
+
+
+
+  
+
+
+
+  
+    
+        <script src="/js/theme.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/codecopy.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/search.js"></script>
+      
+    
+  
+
+
+  </body>
+</html>

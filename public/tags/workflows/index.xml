@@ -6,8 +6,15 @@
     <description>Recent content in Workflows on CantScript</description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 26 Jul 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 09 Aug 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/workflows/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Advanced Setup Manager Flows in Jamf School, Part 2</title>
+      <link>http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school-part-2/</link>
+      <pubDate>Sat, 09 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school-part-2/</guid>
+      <description>In the first part of this blog we looked to power up the feature set of Jamf Setup Manager with Jamf School. Using this as a foundation, in the second part we&rsquo;ll create a Single Touch IT Driven workflow perfect for any IT dept providing a white glove service for their end users</description>
+    </item>
     <item>
       <title>Advanced Setup Manager Flows in Jamf School, Part 1</title>
       <link>http://localhost:1313/posts/advanced-setup-manager-flows-in-jamf-school/</link>
