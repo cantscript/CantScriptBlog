@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="content-language" content="en-us" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  
+  
+  <title>Continue To Sync Passwords with Jamf Connect and Jamf School &middot; CantScript</title>
+  <meta name="title" content="Continue To Sync Passwords with Jamf Connect and Jamf School &middot; CantScript" />
+  
+
+  
+  
+  <meta name="description" content="In recent releases of Jamf Connect the menu bar app is not included in favour of using Self Service &#43; for Jamf Pro Admins...but what if you&#39;re a Jamf School Admin wanting to keep local and cloud passwords in sync with Connect? In this blog we explore the options and workflows." />
+  
+  <meta name="keywords" content="identity, macOS, workflows, scripting, " />
+  <link rel="canonical" href="http://localhost:1313/posts/continue-to-sync-passwords-with-jamf-connect-and-jamf-school/" />
+
+  
+
+  
+    
+        <link rel="stylesheet" href="/css/theme.css">
+    
+  
+    
+        <link rel="stylesheet" href="/css/main.css">
+    
+  
+    
+  
+
+
+
+  
+  
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="CantScript" />
+<link rel="manifest" href="/site.webmanifest" />
+
+
+  
+
+  <meta property="og:url" content="http://localhost:1313/posts/continue-to-sync-passwords-with-jamf-connect-and-jamf-school/">
+  <meta property="og:site_name" content="CantScript">
+  <meta property="og:title" content="Continue To Sync Passwords with Jamf Connect and Jamf School">
+  <meta property="og:description" content="In recent releases of Jamf Connect the menu bar app is not included in favour of using Self Service &#43; for Jamf Pro Admins…but what if you’re a Jamf School Admin wanting to keep local and cloud passwords in sync with Connect? In this blog we explore the options and workflows.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-09-08T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-09-08T00:00:00+00:00">
+    <meta property="article:tag" content="Identity">
+    <meta property="article:tag" content="MacOS">
+    <meta property="article:tag" content="Workflows">
+    <meta property="article:tag" content="Scripting">
+
+  
+    <meta property="og:image" content="http://localhost:1313/JCMenuBanner.png" />
+  
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Continue To Sync Passwords with Jamf Connect and Jamf School">
+  <meta name="twitter:description" content="In recent releases of Jamf Connect the menu bar app is not included in favour of using Self Service &#43; for Jamf Pro Admins…but what if you’re a Jamf School Admin wanting to keep local and cloud passwords in sync with Connect? In this blog we explore the options and workflows.">
+
+  
+    <meta name="twitter:image" content="http://localhost:1313/JCMenuBanner.png" />
+  
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script
+      defer
+      type="text/javascript"
+      src="/lib/fuse/fuse.min.1f56d60a7738743270762a2aa4e0a453be99c4476f06f3b2f51f4377d12a7ed973420f76a308d7e4855d88ec34d25940c9015464934faf30e7599fe566d7f6e4.js"
+      integrity="sha512-H1bWCnc4dDJwdioqpOCkU76ZxEdvBvOy9R9Dd9EqftlzQg92owjX5IVdiOw00llAyQFUZJNPrzDnWZ/lZtf25A=="
+    ></script>
+  
+
+
+
+  
+  
+
+
+  
+  
+  
+  
+  
+
+  
+  
+  
+    <link rel="preload" href="http://localhost:1313/fonts/Ubuntu-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  
+
+  
+
+  
+
+  
+  <script>
+    const siteTheme = "dark";
+    let savedTheme = localStorage.getItem('theme') || siteTheme;
+    if (savedTheme == 'auto') {
+      if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
+        savedTheme = 'dark';
+      }
+    }
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  </script>
+  
+  
+
+<script src="https://cdn.counter.dev/script.js" data-id="4f40f3ac-7039-4087-b21a-96d3879a1fdc" data-utcoffset="1"></script>
+  
+</head>
+
+  <body>
+    <div class="content">
+      <header>
+    
+    <a class="title" href="/">
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+
+  
+    <img loading="" 
+
+    
+      
+        
+        
+        
+          
+          
+          
+            src="/img/CantScript_LogoOnlyv3_hu_8dd51e941f19ba6f.png"
+          
+        
+      
+    
+      alt="Site Logo" />
+  
+
+
+
+
+    </a>
+    
+    <div class="header-cntr">
+    <a class="title" href="/">
+    <span>CantScript</span>
+    </a>
+  <div class="menu">
+  <nav id="main-menu" class="mm-normal">
+    <ul>
+    <li> <button id="mob-x-icon" class="menu-btn" arial-label="x-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+ </button> </li>
+    
+      <li><a href="/posts/" aria-label="posts">
+      Posts</li></a>
+    
+      <li><a href="/about/" aria-label="about">
+      About</li></a>
+    
+      <li><a href="/more/" aria-label="more">
+      More</li></a>
+    
+      <li><a href="https://github.com/cantscript" aria-label="github">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://www.linkedin.com/in/anthony-darlow-a795b294/" aria-label="linkedin">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+      <li><a href="https://macadmins.slack.com/team/UA73QAKJL" aria-label="slack">
+      
+        <span>
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+
+
+
+        </span>
+          </li></a>
+    
+    </ul>
+  </nav>
+    <div class="side-menu">
+    
+<button id="search-open" class="menu-btn" aria-label="Search button">
+  
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+</button>
+
+<div id="search-container" data-url="http://localhost:1313/">
+  <div class="search">
+    <div class="panel">
+      <form>
+        
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+
+
+        <input type="search" id="search-query" placeholder="Search" tabindex=0 autocomplete="off"/>
+        <button id="search-close" title="Cancel (ESC)">
+          
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+
+
+        </button>
+      </form>
+    </div>
+    <ul id="search-results">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+    <div id="search-overlay"></div>
+  </div>
+</div>
+
+    
+    <button id="theme-switcher" class="menu-btn" aria-label="Theme switcher">
+      <div id="moon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+
+
+      </div>
+      <div id="sun">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+
+
+      </div>
+    </button>
+    
+    </div>
+    <button id="mob-hb-icon" class="menu-btn" aria-label="Hamburger icon">
+      
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+
+
+    </button>
+  </div>
+  <script>
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('mob-hb-icon');
+    const closeBtn = document.getElementById('mob-x-icon');
+    const mainMenu = document.getElementById('main-menu');
+    const body = document.body;
+
+    openBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-normal', 'mm-mobile-open');
+        closeBtn.style.display = 'block';
+        body.style.overflow = 'hidden';
+    });
+    closeBtn.addEventListener('click', function() {
+        mainMenu.classList.replace('mm-mobile-open', 'mm-normal');
+        closeBtn.style.display = 'none';
+        body.style.overflow = '';
+    });
+    })
+  })();
+  </script>
+  
+  <script>
+  (function() {
+    var mainmenu = document.getElementById('main-menu');
+    if (!mainmenu) return;
+
+    var path = window.location.pathname;
+    var links = mainmenu.querySelectorAll('a');
+
+    links.forEach(function(link) {
+      if (link.getAttribute('href') === path) {
+        link.classList.add('active');
+      }
+    });
+  })();
+  </script>
+  
+</div>
+</header>
+
+      <main>
+        
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+  
+    <img loading="eager" class="cover-img"
+
+    
+      
+        src="/posts/continue-to-sync-passwords-with-jamf-connect-and-jamf-school/JCMenuBanner.png"
+      
+    
+      alt="Cover Image" />
+  
+
+
+
+
+
+
+
+
+
+<ul class="breadcrumbs">
+  <li><a href="http://localhost:1313/">
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+
+
+</a></li>
+  
+    
+    
+      <li><a href="http://localhost:1313/posts/">Posts</a></li>
+    
+    
+  
+    
+  
+</ul>
+
+
+
+<h1 class="pg-title">Continue To Sync Passwords with Jamf Connect and Jamf School</h1>
+
+
+<div class="meta">
+  
+
+
+
+<p>
+
+
+  
+  
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2a1,1,0,0,1,1,1Z"/></svg>
+
+
+</span>
+  Posted on <time datetime="2025-09-08T00:00:00&#43;00:00">Sep 8, 2025</time>
+  
+  
+  
+
+
+  <span class="meta-icon">
+
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+<path d="M23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12ZM3.00683 12C3.00683 16.9668 7.03321 20.9932 12 20.9932C16.9668 20.9932 20.9932 16.9668 20.9932 12C20.9932 7.03321 16.9668 3.00683 12 3.00683C7.03321 3.00683 3.00683 7.03321 3.00683 12Z" fill="currentColor"/>
+<path d="M12 5C11.4477 5 11 5.44771 11 6V12.4667C11 12.4667 11 12.7274 11.1267 12.9235C11.2115 13.0898 11.3437 13.2343 11.5174 13.3346L16.1372 16.0019C16.6155 16.278 17.2271 16.1141 17.5032 15.6358C17.7793 15.1575 17.6155 14.5459 17.1372 14.2698L13 11.8812V6C13 5.44772 12.5523 5 12 5Z" fill="currentColor"/>
+</svg>
+
+
+</span>
+  
+    17 mins
+  
+
+
+</p>
+
+  
+
+
+<p>
+  <span class="meta-icon"> 
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M48 32H197.5C214.5 32 230.7 38.74 242.7 50.75L418.7 226.7C443.7 251.7 443.7 292.3 418.7 317.3L285.3 450.7C260.3 475.7 219.7 475.7 194.7 450.7L18.75 274.7C6.743 262.7 0 246.5 0 229.5V80C0 53.49 21.49 32 48 32L48 32zM112 176C129.7 176 144 161.7 144 144C144 126.3 129.7 112 112 112C94.33 112 80 126.3 80 144C80 161.7 94.33 176 112 176z"/></svg>
+
+
+ </span>
+  
+  <a class="tag" href="/tags/identity/">Identity</a>
+  
+  <a class="tag" href="/tags/macos/">MacOS</a>
+  
+  <a class="tag" href="/tags/workflows/">Workflows</a>
+  
+  <a class="tag" href="/tags/scripting/">Scripting</a>
+  
+</p>
+
+
+
+</div>
+
+
+
+
+  <div class="toc">
+    <details >
+      <summary accesskey="c" title="(Alt+C)">
+        Table of Contents
+      </summary>
+      <div class="toc-innr">
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#so-what-changed">So What Changed?</a></li>
+        <li><a href="#wait-a-second-i-thought-this-was-about-jamf-school">Wait A Second, I Thought This Was About Jamf School&hellip;</a></li>
+        <li><a href="#how-do-i-continue-to-use-the-menu-bar-features">How Do I Continue To Use The Menu Bar Features?</a></li>
+        <li><a href="#extracting-the-jamf-connect-menu-bar-app">Extracting the Jamf Connect Menu Bar App</a></li>
+        <li><a href="#creating-a-jamf-connect-menu-bar-app-only-pkg">Creating a Jamf Connect Menu Bar App Only Pkg</a></li>
+        <li><a href="#using-the-jamf-connect-menu-bar-app-pkg">Using the Jamf Connect Menu Bar App Pkg</a></li>
+        <li><a href="#to-wrap-up">To Wrap Up</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+    </details>
+  </div>
+  
+
+
+
+<p>For as long as I can remember the Jamf Connect dmg that is provided by Jamf included two elements <em>(actually thats not entirely true, I do remember multiple dmg or pkg at the very very start&hellip;turns out Im going to nerd snipe myself within the first sentence this blog)</em>. The first element is the <strong>login window &ldquo;app&rdquo;</strong>, this is the part that provides the custom experience provided by the IdP, which can be branded and configured in a number of different ways. The point of this element is to ensure a successful authentication with the IdP and then <a href="https://learn.jamf.com/en-US/bundle/jamf-connect-documentation-2.45.0/page/Initial_Local_Password_Creation.html" target="_blank">create a local user account</a>
+ which the matching username and password of that in the cloud.</p>
+<p>The second element is what became the known as the <strong>&ldquo;menu bar app&rdquo;</strong>. The purpose of this element was to ensure that the local user account password <a href="https://learn.jamf.com/en-US/bundle/jamf-connect-documentation-2.45.0/page/Password_Syncing_with_Jamf_Connect.html#ID-000047b8" target="_blank">continued to match</a>
+ that users cloud password that is with the IdP. If it were ever out of sync it would kick off a workflow for the user to sync everything back up again.</p>
+<p>The menu bar app also enabled IT admins to add some quick links to open apps or websites and more recently was the method for users to invoke a <a href="https://learn.jamf.com/en-US/bundle/jamf-connect-documentation-2.45.0/page/Configuring_Privilege_Elevation.html" target="_blank">priviledge elevation workflow</a>
+, making them an Admin for a short, predefined amount of time <em>(should you as an admin want to switch this feature on of course)</em>.</p>
+<p>&hellip;and this, in a nutshell was Jamf Connect for a Jamf School Admin. However, if you&rsquo;ve recently deployed Jamf Connect&rsquo;s latest version while building a new Mac, you might have been confused to find that although the Login Window experience is what you expected, you know longer have the menu bar app and can&rsquo;t find the app in your <code>Applications</code> folder either</p>
+
+<h3 id="so-what-changed">
+  So What Changed?
+  
+</h3>
+<p>At JNUC 2024, in the <a href="https://youtu.be/zB3xuWjlxgY?si=XZFtLu5AeVb_EowE&amp;t=2342" target="_blank">main keynote</a>
+, Jamf introduced <a href="https://learn.jamf.com/en-US/bundle/self-service-plus-documentation/page/About_Self_Service_Plus.html" target="_blank">Self Service +</a>
+. A evolution on Self Service that many Jamf and none Jamf customers alike know as the staple &ldquo;Jamf App&rdquo;. As time has gone on though its not the <em><strong>ONLY</strong></em> Jamf app and Self Service + looks to merge the Jamf end user apps into one. The Self Service + documents states</p>
+<blockquote>
+<p>Self Service+ is an end user application for macOS that allows users to access content and updates that have been preconfigured in Jamf Pro. In addition to acting as an enhancement and eventual replacement for Self Service classic, Self Service+ provides a streamlined end user experience by consolidating Jamf end user applications into a single app.</p></blockquote>
+<p>A few months ago we saw this concept start to take shape when Self Service + was able to tackle the tasks that the Jamf Connect menu bar app was used for. This meant for Jamf Pro Admins they could offer password sync and privilege elevations through the same app many of their user were already familiar with and not need to deploy the additional menu bar app.</p>
+<p>Expect, its part of the Jamf Connect dmg.</p>
+<p>So, essentially admins were deploying the menu bar app for Self Service + to remove it and take over that functionality. Over the same few months, with Jamf Pro releases it&rsquo;s become easier and more &ldquo;default&rdquo; to deploy Self Service + over Self Service Classic. As more people use Self Service +, less people need the menu bar app.</p>
+<p>Therefore, as of Jamf Connect version <code>3.0+</code>, the dmg now <em><strong>ONLY</strong></em> contains the login window &ldquo;app&rdquo;</p>
+
+<h3 id="wait-a-second-i-thought-this-was-about-jamf-school">
+  Wait A Second, I Thought This Was About Jamf School&hellip;
+  
+</h3>
+<p>If you are reading this thinking</p>
+<ul>
+<li>&ldquo;I don&rsquo;t know what Self Service is&rdquo;</li>
+<li>&ldquo;Isn&rsquo;t Self Service for Jamf Pro only?&rdquo;</li>
+<li>&ldquo;I Didn&rsquo;t know you can use Self Service with Jamf School&rdquo;</li>
+</ul>
+<p>Then thats sort of the point of this blog post! If you are thinking one or a combination of the above, that likely places you squarely in the Jamf School only Admin camp. Not knowing about Self Service or Self Service + as a Jamf School Admin is completely fine since it&rsquo;s not used in Jamf School. If you, for whatever reason, have a foot in both Jamf Pro and School camps you likely also have questions about the use of Self Service in Jamf School.</p>
+<p>Simply, the answer is, Self Service + is only for Jamf Pro!</p>
+<p>That does leave Jamf School admins with a bit of a gap, though. Jamf Connect no longer has the menu bar included and Self Service + isn&rsquo;t for Jamf School. On the face of it, it looks like Jamf Connect can only provide the account creation element via the login window app. Bad luck if you want to keep your password in sync or offer a privilege elevation solution, right?</p>
+<p>Wrong! 😜</p>
+<p>lets look at the options available to Jamf School Admins</p>
+
+<h3 id="how-do-i-continue-to-use-the-menu-bar-features">
+  How Do I Continue To Use The Menu Bar Features?
+  
+</h3>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+<p>Just to be clear, if you have currently deployed macOS devices with Jamf Connect menu bar app installed, you have nothing to worry about or act on. Upgrading to the latest version of Jamf Connect will not remove the menu bar app.</p>
+<p>The following discussed options and flows are for consideration when you re-deploy devices or deploy new devices in your environment.</p>
+
+</span>
+</div>
+
+<p>There are a few ways we can deal with things. The first 3 are more &ldquo;out of the box&rdquo; solutions but like with many things in life, if you are willing to put a little bit of work in, theres a forth solution. In my opinion, this gives the best result and would be the way I would tackle this challenge in the real world.</p>
+<ol>
+<li>Use Jamf School&rsquo;s App Installers</li>
+<li>Continue to deploy Jamf Connect 2.45.x</li>
+<li>Deloy Jamf Connect 2.45.x, followed by 3.x</li>
+<li>Maintain a menu bar app only package and deploy the latest Jamf Connect pkg</li>
+</ol>
+<p><strong>1. Use Jamf School&rsquo;s App Installers</strong> <br>
+At the time of writing at least, if you deploy Jamf Connect through <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Jamf_School_App_Installers.html" target="_blank">App Installers with Jamf School</a>
+ it appears that the version has been pinned at <code>v2.45.1</code> which is the last version where the dmg contained both the login window and menu bar app elements.</p>
+<p>If you choose this method it means that your devices will get the menu bar app but also will not get the latest version of the login window. This might not be an issue as a whole but if the login window gets an update in the future that requires a later version and that you want to make use of, you wont be able to.</p>
+<p>The other consideration when using this option is how / when you deploy Jamf Connect. If you wish to have Jamf Connect as part of your onboarding flow and require the Jamf Connect login window to be the first place a user can sign in, App Installers is not the most reliable option. In this flow you&rsquo;d want to deploy via an <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/Jamf_Connect_Deployment_with_Jamf_School.html" target="_blank">ADE Package</a>
+.</p>
+<p><strong>2. Continue to deploy Jamf Connect 2.45.x</strong> <br>
+If you are using an ADE style workflow you will need to upload the package you wish to deploy, which means you can control the version of Jamf Connect gets deployed. This then becomes more of a question of where to get an older version of Jamf Connect from. Many users know that navigating to <code>https://files.jamfconnect.com/JamfConnect.dmg</code> will download the most recent version of Jamf Connect (this is the URL used in the <a href="https://github.com/Installomator/Installomator/blob/main/fragments/labels/jamfconnect.sh" target="_blank">Installomator label</a>
+ as well)</p>
+<p>However if you are a Jamf Connect or Jamf for K12 customer you are also able download Jamf Connect&rsquo;s latest version <em>or</em> a previous version from <a href="https://learn.jamf.com/en-US/bundle/jamf-account-documentation/page/Jamf_Account_Documentation.html" target="_blank">Jamf Account</a>
+.</p>
+<div style="text-align: center;">
+    <img src="JamfAccountJCDL.png" alt="Viewing JC versions in Jamf Account" style="max-width: 100%; height: auto;">
+</div>
+<p>Once logged into Jamf Account, and providing you have a licence and correct Jamf Account priviledges you can navigate to</p>
+<ul>
+<li><code>Solutions</code> -&gt; <code>View Details</code> in the Jamf Connect box</li>
+<li>Click <code>downloads</code> in the menu across the top</li>
+<li>Then in the drop down menu at the right of the window select the needed version, in our case <code>2.45.1</code></li>
+<li>Once you have this dmg you extract the <code>JamfConnect.dmg</code> and upload it to Jamf School as an <a href="https://learn.jamf.com/en-US/bundle/jamf-school-documentation/page/In-House_Content_Distribution.html" target="_blank">In-house macOS package</a>
+</li>
+</ul>
+<p>This package is then ready to use in an ADE workflow and once deployed will install both the login window and menu bar app elements.</p>
+<p>Like with the above option the version of the login window is the older <code>2.45.1</code> version. If and when an update to the login window is released that has a feature you want to use in that ADE workflow, you&rsquo;re kind of out of luck.</p>
+<p><strong>3. Deloy Jamf Connect 2.45.x, followed by 3.x</strong> <br>
+The obvious answer here is to deploy version <code>2.45.1</code> using one of the methods discussed above and depending on your needs and then install the most up to date version directly afterwards.</p>
+<p>Like I said before, if you have 2.45.1 already installed and then deploy <code>version 3.x</code> or above you the menu bar app isn&rsquo;t removed <em>(or a least at the time of writing)</em>. Doing this will ensure you get the menu bar app for your password syncing and privilege elevations as well as the latest and greatest in regards to the login window &ldquo;app&rdquo;.</p>
+<p>How you install the latest version, weather thats app installers after the fact, another pkg maintained as an in-house macOS pkg or maybe even using a tool like <a href="https://github.com/Installomator/Installomator" target="_blank">Installomator</a>
+, is up to you.</p>
+<p>However, for me this just feels like a false economy. Install one thing to immediately replace it with something else and even though Jamf Connect is a small pkg when you scale this for the numbers of your deployment, the idea of downloading &ldquo;the same thing&rdquo; twice just doesn&rsquo;t feel right from a bandwidth point of view either.</p>
+<p>I&rsquo;m not at all saying that this is wrong, I just think we can work a little smarter&hellip;which brings me to</p>
+<p><strong>4. Maintain a menu bar app only package and deploy the latest Jamf Connect pkg</strong> <br>
+We&rsquo;ve already covered the fact that the Jamf Connect dmg pre <code>version 3.x</code> contained both the login window and menu bar elements and anything <code>version 3.x</code> onwards, only the login window element.</p>
+<p>If you take the pkg from both the latest and the <code>2.45.1</code> versions and inspected them with a tool like <a href="https://mothersruin.com/software/SuspiciousPackage/" target="_blank">Suspicious Package</a>
+, you&rsquo;ll see that the only thing that looks different is the addition of <code>/Applications/Jamf Connect.app</code> in the <code>2.45.1</code> pkg. This suggests that the <code>Jamf Connect.app</code> is a self contained app and the other elements in the pkg are related to the login window.</p>
+<p>If we were to extract the <code>Jamf Connect.app</code> and re-package, we could deploy this independantly of the latest version of the login window app, at any point we like. You might be reading this wondering how this is any better then installing one version and then another right over the top of it. If this is you, here are a few reasons I think this is the better way</p>
+<p>Firstly, now that the menu bar app is not contained in the newer versions we can, with some confidence, assume that Jamf will not be releasing regular, if any, updates to this app. This means, that although this is an extra pkg to add to my deployment I wont regularly <em>(if ever)</em> need to maintain versions of this. Build the pkg once and pretty much forget about it.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+I should point out this doesn&rsquo;t mean we&rsquo;ll <em>never</em> see an update to the menu bar app. Who knows if we&rsquo;ll see any security patches or even a notice that is not supported on macOS of the future. So, depending on how far in the future you are reading this, maybe best to double check my thought process here!
+</span>
+</div>
+
+<p>Secondly, the menu bar app is used in the user space, once the user logs in. Its not needed for ADE workflows, we only need the login window element for these workflows. That means I can deploy this pkg later in my deployment workflow, it hasn&rsquo;t and shouldn&rsquo;t be added as a ADE package. This is also less &ldquo;wasteful&rdquo; than deploying a &ldquo;complete&rdquo; Jamf Connect twice, one to get the menu bar app and another to update the login window.</p>
+<p>Finally, doing this means you can focus on ensuring the login window element is always the latest version in your ADE flow which means you can make use of the latest and greatest features that come along with the login window as time goes on. Again, how you get the latest version in your ADE workflow is going to be down to your onboarding flow but this way also lends itself very nicely to a <a href="https://github.com/jamf/Setup-Manager" target="_blank">Jamf Setup Manager workflow</a>
+, where Setup Manager will always deploy the latest version of Jamf Connect <em>(and means you&rsquo;re not actually maintaining a &ldquo;latest&rdquo; Jamf Connect package in Jamf School at all)</em>.</p>
+
+<h3 id="extracting-the-jamf-connect-menu-bar-app">
+  Extracting the Jamf Connect Menu Bar App
+  
+</h3>
+<p>If like me, you also think that this option is the best of all worlds, <em>(the latest login window &ldquo;app&rdquo; and the installation of the menu bar app in a way that has the least maintenance involved)</em> then you might be wondering how to extract and re-package the menu bar app. Well, if thats you, you are in luck&hellip;.lets dig in.</p>
+<p>The first thing that you will need is the <code>2.45.1</code> version of the Jamf Connect dmg which, as described above can be found from your Jamf Account. With this in hand mount the dmg and copy the JamfConnect.pkg to desktop <em>(or other suitable location that works for you)</em></p>
+<p>Theres a few ways to extract the app from the package, with the simplest being install the pkg. Only this package has a <code>postinstall</code> script which changes your default login experience for that of Jamf Connect and if you do this on a production machine and / or don&rsquo;t have a Jamf Connect configuration profile installed&hellip;.you&rsquo;re in for a bad time.</p>
+<p>As such, <strong>Don&rsquo;t install the package</strong>.</p>
+<p>Instead, if you haven&rsquo;t already got <a href="https://mothersruin.com/software/SuspiciousPackage/" target="_blank">Suspicious Package</a>
+, go and download it. In my opinion it should be in every macadmins toolkit anyway. Once installed open the app and drag the <code>JamfConnect.pkg</code> into the app window, this will allow us in inspect whats in the package.</p>
+<p>Click on on the <code>All Files</code> tab and then the disclosure triangle next to <code>Applications</code> to expand, from here you will see the <code>Jamf Connect.app</code>. Right click the <code>Jamf Connect.app</code> and choose one of the export options <em>(you can choose a location on the disk or quickly export to downloads)</em>.</p>
+<div style="text-align: center;">
+    <img src="SusPkgExtract.png" alt="Suspicious Package Window" style="max-width: 100%; height: auto;">
+</div>
+<p>The app is now extracted from the original package and ready for us to re-package.</p>
+
+<h3 id="creating-a-jamf-connect-menu-bar-app-only-pkg">
+  Creating a Jamf Connect Menu Bar App Only Pkg
+  
+</h3>
+<p>I&rsquo;ve covered creating packages in a few blogs now and often point to <a href="https://scriptingosx.com" target="_blank">Armins</a>
+ packaging book if packaging is new to you but in a recent <a href="https://scriptingosx.com/2025/08/books-update-2025/" target="_blank">scriptingosx blog</a>
+ Armin mentioned he will be soon pulling the book from the book store as there are elements that are out of date. However, if you follow the link to the blog he is rewriting the core elements and releasing them as a series (rather than a book) over at <a href="https://scriptingosx.com" target="_blank">scriptingosx</a>
+.</p>
+<p>Usually, I&rsquo;d also mention <a href="https://www.jamf.com/products/jamf-composer/" target="_blank">Jamf Composer</a>
+ as an option for creating packages. Only this time we have to do a little bit extra which we can only do be scripting our package creation rather than relying on Composer.</p>
+<p>Thanks to the recently re-written articles that Armin is releasing, when I came across a specifc problem while testing, my brain kicked me to remember this</p>
+<blockquote>
+<p>In recent versions of macOS, pkgbuild will preserve extended file attributes in the payload. <br>
+[&hellip;] <br>
+You generally do not want to have extended attributes be part of your package payload. This is especially true of quarantine flags!</p></blockquote>
+<p>Out of context you might be a bit 🤷🏼‍♂️</p>
+<p>Essentially, since we downloaded Jamf Connect from the internet, macOS flags the app as risky and when you deploy the package it fails. Or more so, when you try to run the app after installing the package it will not run, instead displaying a message that it might be malware. Clearly, this is not a good experience for our end users or the behaviour we want.</p>
+<p>In older versions of macOS the file attributes were not carried over with the file when being packaged so wasn&rsquo;t something that we needed to worry about. As Armin points out however, in recent macOS they do carry over. So we need to be sure we remove any file attributes. This can be done with the following command</p>
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>xattr -cr <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>projectfolder<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div>
+
+
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+As noted above Jamf Composer does currently not have the the ability to remove the file attributes required for this workflow
+</span>
+</div>
+
+<p>As usual I have added an example <a href="https://github.com/cantscript/JamfConnectMenuAppPkgr/tree/main" target="_blank">packager script</a>
+ to my <a href="https://github.com/cantscript" target="_blank">GitHub</a>
+.</p>
+<p>Once you&rsquo;ve downloaded the Repo you will need to add the extracted <code>Jamf Connect.app</code> to the <code>payload/Applications</code> folder before running the pkgr script.</p>
+
+<h3 id="using-the-jamf-connect-menu-bar-app-pkg">
+  Using the Jamf Connect Menu Bar App Pkg
+  
+</h3>
+<p>After the pkgr script has ran the resulting pkg will be on the desktop of your current user. From here you can treat the pkg as any other in-house pkg in Jamf School.</p>
+<ul>
+<li>Navigate to Apps -&gt; Inventory and click + Add App</li>
+<li>Choose Add In-House macOS Package</li>
+<li>Navigate to the <code>JamfConnectMenuBar.pkg</code> on your machine and drag to the Jamf School window</li>
+<li>Once uploaded click save</li>
+</ul>
+<p>From here scope to the target devices as required but remember this now does not need to be part of your ADE packages. Instead you can just scope it like all other apps after the fact.</p>
+<p>There is one additional thing and if you are already a Jamf Connect customer, you&rsquo;re likely already doing this&hellip;</p>
+<p>The Jamf Connect menu bar does not automatically open when a user logs in but needs to be open / in the menu in order to do the continued password sync checks. To ensure that the app opens at login (and in actual fact re-opens any time its closed) there is a <code>JamfConnectLaunchAgent.pkg</code> found in the dmg under <code>resources</code></p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+At time of writing the <code>JamfConnectLaunchAgent.pkg</code> is available in both the <code>2.45.1</code> and <code>3.2.0</code> (latest current version) dmg&rsquo;s
+</span>
+</div>
+
+<p>This pkg should be deployed alongside the package you have created for the menu bar app (for extra credit, create a single package that includes both this LaunchAgent and the App). This way you can be sure the menu bar app is always open and able to operate.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+<p>One thing that I have noticed during my testing is that if the menu bar app is open while a new version of Jamf Connect (through app installers, Installomator, or that you&rsquo;ve updated the &ldquo;in-house&rdquo; pkg in Jamf School) is trying to install, a user will get a pop up with wording to the effect of &ldquo;Jamf Connect needs to update please close Jamf Connect&rdquo;.</p>
+<p>Of course, if you use the <code>LaunchAgent</code> as suggested above, if the user chooses <code>quit</code> the app just re-opens and theres a loop created where the notification appears, user quits, menu bar re-opens, notifications appears, user quits etc etc.</p>
+<p>Logging out will enable the menu bar app to close and the update to take place.</p>
+<p>Since I&rsquo;ve been working with a fairly current version, Im not sure if this happens every time theres an update or just the first time after you&rsquo;ve installed the menu bar app independently.</p>
+<p>Either way, worth considering updating Jamf Connect when theres going to be no user logged in (for lab devices this is a little easier).</p>
+
+</span>
+</div>
+
+
+<h3 id="to-wrap-up">
+  To Wrap Up
+  
+</h3>
+<p>To quickly wrap up. Things have changed with the Jamf Connect dmg due to the introduction of Self Service +, a tool that is available only for Jamf Pro.</p>
+<p>This doesn&rsquo;t mean a Jamf School admin can not make use of password syncing or privilege elevation, theres a few options available.</p>
+<p>In this post we&rsquo;ve covered a number of ways but I firmly believe maintaining your own menu bar app, by re-packaging it, is the best and most flexible way forward.</p>
+<p>To make this even easier, the example pkgr script that I&rsquo;ve shared on <a href="https://github.com/cantscript/JamfConnectMenuAppPkgr/tree/main" target="_blank">GitHub</a>
+ only requires you to add the menu bar app into a pre-defined folder and to run the script. There really is very little work if you do want to use this method.</p>
+
+  
+
+
+<div class="callout"
+  
+>
+<span class="icon"
+
+>
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+
+
+</span>
+<span class="txt"
+
+>
+<p>I started the post nerd snipping myself, so lets end with other nerd snipe. Depending on your licensing, in Jamf Account you might still be able to download Self Service + and deploy it in Jamf School. Self Service + will then show only the Jamf Connect Menu Bar features (other Self Service + features are for Jamf Pro only)&hellip;.</p>
+<p>However, just because you can doesn&rsquo;t mean you should! Its a confusing experience for your end users who will be used to using Jamf Teacher or Student for self service purposes but then need to use an app called Self Service + if they want to make themselves an admin for a period of time or want to handle a password change.</p>
+<p>So, just no&hellip;.</p>
+
+</span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="pagenav">
+  
+  <div></div>
+  
+  
+    <a class="next" href="/posts/advanced-setup-manager-flows-in-jamf-school-part-2/">
+      <span class="direction">Next »</span>
+      <br>
+      <span> Advanced Setup Manager Flows in Jamf School, Part 2 </span>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+      </main>
+      <footer>
+  <div class="copyright">
+     © 2025  Anthony Darlow 
+  </div>
+  
+  <div class="attribution">
+    Built with <a href="https://gohugo.io" target="_blank">Hugo</a> & <a href="https://github.com/mnjm/kayal" target="_blank">Kayal</a>
+  </div>
+  
+  
+  <div>Last update Sep 12, 2025</div>
+  
+</footer>
+
+    </div>
+    
+
+
+  
+
+
+
+  
+
+
+
+  
+    
+        <script src="/js/theme.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/codecopy.js"></script>
+      
+    
+  
+
+  
+    
+        <script src="/js/search.js"></script>
+      
+    
+  
+
+
+  </body>
+</html>
