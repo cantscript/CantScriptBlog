@@ -1,6 +1,6 @@
 +++
 title = 'Continue To Sync Passwords with Jamf Connect and Jamf School'
-date = 2025-09-08
+date = 2025-09-15
 coverImg = "JCMenuBanner.png"
 summary = "In recent releases of Jamf Connect the menu bar app is not included in favour of using Self Service + for Jamf Pro Admins...but what if you're a Jamf School Admin wanting to keep local and cloud passwords in sync with Connect? In this blog we explore the options and workflows."
 tags = [ 'identity', 'macOS', 'workflows', 'scripting' ]
